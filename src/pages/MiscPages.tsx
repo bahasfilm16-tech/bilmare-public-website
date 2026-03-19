@@ -6,7 +6,7 @@ const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 const supabase          = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const PORTAL_TIM    = 'https://lengkap-internal-bilmare-2.vercel.app/';
+const PORTAL_TIM    = 'https://portal-tim.vercel.app/';
 const PORTAL_CLIENT = 'https://portal-client-delta.vercel.app/';
 
 export function Insight() {
@@ -81,7 +81,6 @@ export function Login() {
     setLoading(true);
 
     try {
-      // 1. Login via Supabase Auth
       const { data: authData, error: authError } =
         await supabase.auth.signInWithPassword({ email, password });
 
@@ -93,7 +92,6 @@ export function Login() {
 
       const userId = authData.user.id;
 
-      // 2. Cek apakah user adalah tim internal
       const { data: teamMember } = await supabase
         .from('bilmare_team_members')
         .select('id')
@@ -105,7 +103,6 @@ export function Login() {
         return;
       }
 
-      // 3. Cek apakah user adalah client
       const { data: clientUser } = await supabase
         .from('client_users')
         .select('id')
@@ -117,7 +114,6 @@ export function Login() {
         return;
       }
 
-      // 4. Fallback: cek kolom role di tabel profiles
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
