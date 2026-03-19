@@ -81,6 +81,7 @@ export function Login() {
     setLoading(true);
 
     try {
+      // 1. Login via Supabase Auth
       const { data: authData, error: authError } =
         await supabase.auth.signInWithPassword({ email, password });
 
@@ -90,12 +91,11 @@ export function Login() {
         return;
       }
 
-      const userId = authData.user.id;
-
+      // 2. Cek apakah email ada di bilmare_team_members
       const { data: teamMember } = await supabase
         .from('bilmare_team_members')
         .select('id')
-        .eq('user_id', userId)
+        .eq('email', email)
         .maybeSingle();
 
       if (teamMember) {
@@ -103,10 +103,11 @@ export function Login() {
         return;
       }
 
+      // 3. Cek apakah email ada di client_users
       const { data: clientUser } = await supabase
         .from('client_users')
         .select('id')
-        .eq('user_id', userId)
+        .eq('email', email)
         .maybeSingle();
 
       if (clientUser) {
@@ -114,10 +115,11 @@ export function Login() {
         return;
       }
 
+      // 4. Fallback: cek kolom role di tabel profiles
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
-        .eq('id', userId)
+        .eq('id', authData.user.id)
         .maybeSingle();
 
       if (profile?.role === 'internal' || profile?.role === 'admin' || profile?.role === 'team') {
