@@ -41,10 +41,15 @@ export default function Layout() {
       {/* Sleek Navigation */}
       <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-black/80 backdrop-blur-xl py-4 border-b border-white/10' : 'bg-transparent py-8'}`}>
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between">
-          <Link to="/" className="text-2xl font-medium tracking-tighter z-50 relative">
-            BILMARE
-          </Link>
-          
+          <Link to="/" className="z-50 relative">
+  <img
+    src="/logo.png"
+    alt="Bilmare"
+    className="h-7 w-auto"
+    style={{ filter: 'brightness(0) invert(1)' }}
+  />
+</Link>
+       
           <nav className="hidden md:flex items-center space-x-10 text-xs font-medium tracking-widest uppercase">
             <Link to="/layanan" className="hover:text-neutral-400 transition-colors">Layanan</Link>
             <Link to="/pendekatan" className="hover:text-neutral-400 transition-colors">Pendekatan</Link>
@@ -114,9 +119,14 @@ export default function Layout() {
           </div>
           
           <div className="flex flex-col md:flex-row justify-between items-end border-t border-white/10 pt-12">
-            <div className="text-[12vw] md:text-[8vw] font-medium tracking-tighter leading-none mb-8 md:mb-0">
-              BILMARE
-            </div>
+            <div className="mb-8 md:mb-0">
+  <img
+    src="/logo.png"
+    alt="Bilmare"
+    className="h-16 w-auto"
+    style={{ filter: 'brightness(0) invert(1)' }}
+  />
+</div>
             <div className="text-sm text-neutral-500 text-right">
               <p>&copy; {new Date().getFullYear()} Bilmare.</p>
               <p>Jakarta, Indonesia.</p>
