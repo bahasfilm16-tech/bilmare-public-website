@@ -85,11 +85,13 @@ export function Login() {
       const { data: authData, error: authError } =
         await supabase.auth.signInWithPassword({ email, password });
 
-      if (authError || !authData.user) {
+      if (authError || !authData.user || !authData.session) {
         setError('Email atau password salah. Silakan coba lagi.');
         setLoading(false);
         return;
       }
+
+      const { access_token, refresh_token } = authData.session;
 
       // 2. Cek apakah email ada di bilmare_team_members
       const { data: teamMember } = await supabase
@@ -103,7 +105,7 @@ export function Login() {
         return;
       }
 
-      // 3. Cek apakah email ada di client_users
+      // 3. Cek apakah email ada di client_users → kirim token
       const { data: clientUser } = await supabase
         .from('client_users')
         .select('id')
@@ -111,7 +113,7 @@ export function Login() {
         .maybeSingle();
 
       if (clientUser) {
-        window.location.href = PORTAL_CLIENT;
+        window.location.href = `${PORTAL_CLIENT}?access_token=${access_token}&refresh_token=${refresh_token}`;
         return;
       }
 
@@ -125,7 +127,8 @@ export function Login() {
       if (profile?.role === 'internal' || profile?.role === 'admin' || profile?.role === 'team') {
         window.location.href = PORTAL_TIM;
       } else {
-        window.location.href = PORTAL_CLIENT;
+        // Default → portal client dengan token
+        window.location.href = `${PORTAL_CLIENT}?access_token=${access_token}&refresh_token=${refresh_token}`;
       }
 
     } catch {
@@ -179,6 +182,7 @@ export function Login() {
                 Lupa password?
               </a>
             </div>
+
             <button
               type="submit"
               disabled={loading}
