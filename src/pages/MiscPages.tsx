@@ -81,15 +81,8 @@ export function Login() {
     setLoading(true);
 
     try {
-      console.log('SUPABASE_URL:', SUPABASE_URL);
-      console.log('Login attempt:', email);
-
-      // 1. Login via Supabase Auth
       const { data: authData, error: authError } =
         await supabase.auth.signInWithPassword({ email, password });
-
-      console.log('authError:', authError);
-      console.log('authData user:', authData?.user?.email);
 
       if (authError || !authData.user || !authData.session) {
         setError('Email atau password salah. Silakan coba lagi.');
@@ -99,52 +92,41 @@ export function Login() {
 
       const { access_token, refresh_token } = authData.session;
 
-      // 2. Cek apakah email ada di bilmare_team_members
-      const { data: teamMember, error: teamError } = await supabase
+      // Cek apakah email ada di bilmare_team_members
+      const { data: teamMember } = await supabase
         .from('bilmare_team_members')
         .select('id')
         .eq('email', email)
         .maybeSingle();
 
-      console.log('teamMember:', teamMember);
-      console.log('teamError:', teamError);
-
       if (teamMember) {
-        console.log('→ Redirect ke PORTAL TIM');
-        window.location.href = `${PORTAL_TIM}?access_token=${access_token}&refresh_token=${refresh_token}`;
+        // Pakai hash fragment supaya token tidak terpotong
+        window.location.href = `${PORTAL_TIM}#access_token=${access_token}&refresh_token=${refresh_token}`;
         return;
       }
 
-      // 3. Cek apakah email ada di client_users → kirim token
-      const { data: clientUser, error: clientError } = await supabase
+      // Cek apakah email ada di client_users
+      const { data: clientUser } = await supabase
         .from('client_users')
         .select('id')
         .eq('email', email)
         .maybeSingle();
 
-      console.log('clientUser:', clientUser);
-      console.log('clientError:', clientError);
-
       if (clientUser) {
-        console.log('→ Redirect ke PORTAL CLIENT');
         window.location.href = `${PORTAL_CLIENT}?access_token=${access_token}&refresh_token=${refresh_token}`;
         return;
       }
 
-      // 4. Fallback: cek kolom role di tabel profiles
+      // Fallback: cek kolom role di tabel profiles
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', authData.user.id)
         .maybeSingle();
 
-      console.log('profile:', profile);
-
       if (profile?.role === 'internal' || profile?.role === 'admin' || profile?.role === 'team') {
-        console.log('→ Redirect ke PORTAL TIM (via profile)');
-        window.location.href = PORTAL_TIM;
+        window.location.href = `${PORTAL_TIM}#access_token=${access_token}&refresh_token=${refresh_token}`;
       } else {
-        console.log('→ Redirect ke PORTAL CLIENT (fallback)');
         window.location.href = `${PORTAL_CLIENT}?access_token=${access_token}&refresh_token=${refresh_token}`;
       }
 
