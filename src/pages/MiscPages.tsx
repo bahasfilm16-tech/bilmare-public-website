@@ -111,7 +111,7 @@ export function Login() {
 
       if (teamMember) {
         console.log('→ Redirect ke PORTAL TIM');
-        window.location.href = PORTAL_TIM;
+        window.location.href = `${PORTAL_TIM}?access_token=${access_token}&refresh_token=${refresh_token}`;
         return;
       }
 
