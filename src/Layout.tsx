@@ -3,28 +3,20 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
 
-// ─── FadeIn ──────────────────────────────────────────────────────────────────
 export const FadeIn = ({
-  children,
-  delay = 0,
-  className = '',
-  direction = 'up',
-  ...props
+  children, delay = 0, className = '', direction = 'up', ...props
 }: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
-  [key: string]: any;
+  children: React.ReactNode; delay?: number; className?: string;
+  direction?: 'up' | 'down' | 'left' | 'right' | 'none'; [key: string]: any;
 }) => {
-  const yOffset = direction === 'up' ? 28 : direction === 'down' ? -28 : 0;
-  const xOffset = direction === 'left' ? 28 : direction === 'right' ? -28 : 0;
+  const y = direction === 'up' ? 24 : direction === 'down' ? -24 : 0;
+  const x = direction === 'left' ? 24 : direction === 'right' ? -24 : 0;
   return (
     <motion.div
-      initial={{ opacity: 0, y: yOffset, x: xOffset }}
+      initial={{ opacity: 0, y, x }}
       whileInView={{ opacity: 1, y: 0, x: 0 }}
-      viewport={{ once: true, margin: '-8%' }}
-      transition={{ duration: 0.85, delay, ease: [0.16, 1, 0.3, 1] }}
+      viewport={{ once: true, margin: '-6%' }}
+      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
       {...props}
     >
@@ -33,8 +25,7 @@ export const FadeIn = ({
   );
 };
 
-// ─── Nav config ───────────────────────────────────────────────────────────────
-const NAV_LINKS = [
+const NAV = [
   { to: '/layanan', label: 'Layanan' },
   { to: '/pendekatan', label: 'Pendekatan' },
   { to: '/klien-kami', label: 'Klien Kami' },
@@ -42,215 +33,172 @@ const NAV_LINKS = [
   { to: '/tentang-kami', label: 'Tentang Kami' },
 ];
 
-const DARK_HERO_PAGES = ['/', '/klien-kami'];
+const DARK_PAGES = ['/', '/klien-kami'];
 
-// ─── Layout ───────────────────────────────────────────────────────────────────
 export default function Layout() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
-
-  const isDarkHero = DARK_HERO_PAGES.includes(location.pathname);
-  const isTransparent = isDarkHero && !isScrolled;
+  const darkHero = DARK_PAGES.includes(location.pathname);
+  const transparent = darkHero && !scrolled;
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 64);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const fn = () => setScrolled(window.scrollY > 56);
+    window.addEventListener('scroll', fn, { passive: true });
+    return () => window.removeEventListener('scroll', fn);
   }, []);
 
   useEffect(() => {
-    setMobileMenuOpen(false);
+    setMenuOpen(false);
     window.scrollTo(0, 0);
-    setIsScrolled(false);
+    setScrolled(false);
   }, [location.pathname]);
 
-  const navBg = isTransparent
-    ? 'bg-transparent'
-    : 'bg-white/95 backdrop-blur-md border-b border-[#0d1f33]/8 shadow-[0_1px_12px_rgba(13,31,51,0.06)]';
-
-  const logoFilter = isTransparent ? 'brightness(0) invert(1)' : 'none';
-  const linkCls = isTransparent
-    ? 'text-white/75 hover:text-white'
-    : 'text-[#0d1f33]/60 hover:text-[#0d1f33]';
-  const loginCls = isTransparent
-    ? 'bg-white/12 text-white border border-white/25 hover:bg-white/22'
-    : 'bg-[#0d1f33] text-white hover:bg-[#162c47]';
-  const hamburgerColor = isTransparent ? 'text-white' : 'text-[#0d1f33]';
-
   return (
-    <div
-      className="min-h-screen bg-white text-[#0d1f33] flex flex-col"
-      style={{ fontFamily: "'DM Sans', 'Helvetica Neue', Arial, sans-serif" }}
-    >
-      {/* ── NAVBAR ─────────────────────────────────────────────────────── */}
-      <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${navBg} ${isScrolled ? 'py-3' : 'py-5'}`}>
-        <div className="max-w-[1380px] mx-auto px-6 md:px-12 flex items-center justify-between">
-          <Link to="/" className="z-50 relative shrink-0">
-            <img
-              src="/logo.png"
-              alt="Bilmare"
-              className="h-7 w-auto transition-all duration-400"
-              style={{ filter: logoFilter }}
-            />
+    <div style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", background: '#fff', color: '#0D1F33' }}>
+
+      {/* NAV */}
+      <header style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        transition: 'all 0.4s ease',
+        background: transparent ? 'transparent' : 'rgba(255,255,255,0.97)',
+        borderBottom: transparent ? 'none' : '1px solid rgba(13,31,51,0.07)',
+        backdropFilter: transparent ? 'none' : 'blur(16px)',
+        padding: scrolled ? '12px 0' : '20px 0',
+      }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Link to="/">
+            <img src="/logo.png" alt="Bilmare" style={{
+              height: 28, width: 'auto',
+              filter: transparent ? 'brightness(0) invert(1)' : 'none',
+              transition: 'filter 0.4s ease'
+            }} />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
-            {NAV_LINKS.map(({ to, label }) => (
-              <Link
-                key={to}
-                to={to}
-                className={`text-[11px] font-semibold tracking-[0.18em] uppercase transition-colors duration-200 ${linkCls}`}
-              >
-                {label}
-              </Link>
+          {/* Desktop */}
+          <nav style={{ display: 'flex', alignItems: 'center', gap: 36 }} className="hidden-mobile">
+            {NAV.map(({ to, label }) => (
+              <Link key={to} to={to} style={{
+                fontSize: 11, fontWeight: 600, letterSpacing: '0.16em',
+                textTransform: 'uppercase', textDecoration: 'none',
+                color: transparent ? 'rgba(255,255,255,0.65)' : 'rgba(13,31,51,0.55)',
+                transition: 'color 0.2s',
+              }}
+                onMouseEnter={e => (e.currentTarget.style.color = transparent ? '#fff' : '#0D1F33')}
+                onMouseLeave={e => (e.currentTarget.style.color = transparent ? 'rgba(255,255,255,0.65)' : 'rgba(13,31,51,0.55)')}
+              >{label}</Link>
             ))}
-            <Link
-              to="/login"
-              className={`ml-1 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-[11px] font-bold tracking-[0.18em] uppercase transition-all duration-200 ${loginCls}`}
-            >
+            <Link to="/login" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              padding: '10px 22px', borderRadius: 100,
+              fontSize: 11, fontWeight: 700, letterSpacing: '0.16em',
+              textTransform: 'uppercase', textDecoration: 'none',
+              background: transparent ? 'rgba(255,255,255,0.12)' : '#0D1F33',
+              color: '#fff',
+              border: transparent ? '1px solid rgba(255,255,255,0.22)' : '1px solid transparent',
+              transition: 'all 0.2s',
+            }}>
               Login <ArrowUpRight size={12} />
             </Link>
           </nav>
 
-          <button
-            className={`md:hidden p-2 -mr-2 z-50 relative transition-colors ${hamburgerColor}`}
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          {/* Mobile burger */}
+          <button onClick={() => setMenuOpen(!menuOpen)} style={{
+            background: 'none', border: 'none', cursor: 'pointer', padding: 8,
+            color: transparent ? '#fff' : '#0D1F33', display: 'none',
+          }} className="show-mobile">
+            {menuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </header>
 
-      {/* ── MOBILE MENU ─────────────────────────────────────────────────── */}
+      {/* Mobile menu */}
       <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-[#0d1f33] flex flex-col justify-center px-8 md:hidden"
-          >
-            <nav className="flex flex-col gap-7">
-              {NAV_LINKS.map(({ to, label }, i) => (
-                <motion.div
-                  key={to}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.07, duration: 0.4 }}
-                >
-                  <Link
-                    to={to}
-                    className="text-3xl font-medium tracking-tight text-white/85 hover:text-white transition-colors"
-                  >
-                    {label}
-                  </Link>
-                </motion.div>
-              ))}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: NAV_LINKS.length * 0.07, duration: 0.4 }}
-              >
-                <Link
-                  to="/login"
-                  className="inline-flex items-center gap-2 text-sm font-bold tracking-widest uppercase text-white/40 hover:text-white transition-colors mt-4"
-                >
-                  Login <ArrowUpRight size={14} />
-                </Link>
+        {menuOpen && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, zIndex: 99, background: '#0D1F33', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px' }}>
+            {NAV.map(({ to, label }, i) => (
+              <motion.div key={to} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>
+                <Link to={to} style={{ display: 'block', fontSize: 32, fontWeight: 600, color: 'rgba(255,255,255,0.8)', textDecoration: 'none', marginBottom: 24, letterSpacing: '-0.01em' }}>{label}</Link>
               </motion.div>
-            </nav>
+            ))}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}>
+              <Link to="/login" style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', textDecoration: 'none', marginTop: 16, display: 'inline-block' }}>Login →</Link>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* ── CONTENT ─────────────────────────────────────────────────────── */}
-      <main className="flex-grow">
-        <Outlet />
-      </main>
+      <main><Outlet /></main>
 
-      {/* ── FOOTER ──────────────────────────────────────────────────────── */}
-      <footer className="bg-[#0d1f33] text-white pt-20 pb-10 px-6 md:px-12">
-        <div className="max-w-[1380px] mx-auto">
-
-          {/* CTA row */}
-          <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-10 pb-16 border-b border-white/10">
-            <div className="max-w-2xl">
-              <p className="text-[10px] font-bold tracking-[0.22em] uppercase text-white/30 mb-4">
-                Mulai percakapan
-              </p>
-              <h2 className="text-3xl md:text-4xl font-semibold tracking-tight leading-[1.2] text-white mb-5">
-                Kepercayaan masa depan dimulai dari<br className="hidden md:block" />
-                pertanggungjawaban hari ini.
+      {/* FOOTER */}
+      <footer style={{ background: '#0D1F33', color: '#fff', padding: '80px 40px 48px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          {/* Top CTA */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 48, alignItems: 'end', paddingBottom: 56, borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 56 }}
+            className="footer-cta-grid">
+            <div>
+              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)', marginBottom: 16 }}>Mulai Percakapan</p>
+              <h2 style={{ fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: 700, lineHeight: 1.18, letterSpacing: '-0.02em', color: '#fff', marginBottom: 16, maxWidth: 560 }}>
+                Kepercayaan masa depan dimulai dari pertanggungjawaban hari ini.
               </h2>
-              <p className="text-white/45 font-light leading-relaxed max-w-lg text-[15px]">
+              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.42)', fontWeight: 300, lineHeight: 1.7, maxWidth: 440 }}>
                 PSPK 1/PSPK 2 berlaku efektif 1 Januari 2027. Jadwalkan asesmen awal — tanpa komitmen di tahap ini.
               </p>
             </div>
-            <Link
-              to="/layanan"
-              className="inline-flex items-center gap-2.5 bg-white text-[#0d1f33] px-7 py-4 rounded-full text-[11px] font-bold tracking-[0.18em] uppercase hover:bg-white/90 transition-colors shrink-0 group"
-            >
-              Jadwalkan Asesmen
-              <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </Link>
+            <Link to="/layanan" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              background: '#fff', color: '#0D1F33', padding: '14px 28px', borderRadius: 100,
+              fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
+              textDecoration: 'none', whiteSpace: 'nowrap',
+            }}>Jadwalkan Asesmen <ArrowUpRight size={13} /></Link>
           </div>
 
-          {/* Links grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 py-14 border-b border-white/10">
-            <div>
-              <p className="text-[10px] font-bold tracking-[0.22em] uppercase text-white/28 mb-5">Layanan</p>
-              <div className="flex flex-col gap-3 text-[13px] text-white/50 font-light">
-                <Link to="/layanan" className="hover:text-white/85 transition-colors">PSPK Readiness Assessment</Link>
-                <Link to="/layanan" className="hover:text-white/85 transition-colors">Verification &amp; Disclosure</Link>
-                <Link to="/layanan" className="hover:text-white/85 transition-colors">Full Report Development</Link>
-                <Link to="/layanan" className="hover:text-white/85 transition-colors">Institutional Memory Retainer</Link>
+          {/* Links */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 40, marginBottom: 56 }} className="footer-links-grid">
+            {[
+              { title: 'Layanan', links: [['Layanan', '/layanan'], ['PSPK Readiness Assessment', '/layanan'], ['Verification & Disclosure', '/layanan'], ['Full Report Development', '/layanan']] },
+              { title: 'Firma', links: [['Pendekatan', '/pendekatan'], ['Klien Kami', '/klien-kami'], ['Tentang Kami', '/tentang-kami']] },
+              { title: 'Sumber Daya', links: [['Insight', '/insight'], ['Panduan PSPK 1/2', '/insight'], ['GRI & IFRS S1/S2', '/insight']] },
+              { title: 'Kontak', links: [['Client Portal', '/login'], ['hello@bilmare.id', '#'], ['Jakarta, Indonesia', '#']] },
+            ].map(col => (
+              <div key={col.title}>
+                <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: 20 }}>{col.title}</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {col.links.map(([label, to]) => (
+                    <Link key={label} to={to} style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300, textDecoration: 'none', transition: 'color 0.2s' }}
+                      onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.82)')}
+                      onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}
+                    >{label}</Link>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold tracking-[0.22em] uppercase text-white/28 mb-5">Firma</p>
-              <div className="flex flex-col gap-3 text-[13px] text-white/50 font-light">
-                <Link to="/pendekatan" className="hover:text-white/85 transition-colors">Pendekatan</Link>
-                <Link to="/klien-kami" className="hover:text-white/85 transition-colors">Klien Kami</Link>
-                <Link to="/tentang-kami" className="hover:text-white/85 transition-colors">Tentang Kami</Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold tracking-[0.22em] uppercase text-white/28 mb-5">Sumber Daya</p>
-              <div className="flex flex-col gap-3 text-[13px] text-white/50 font-light">
-                <Link to="/insight" className="hover:text-white/85 transition-colors">Insight</Link>
-                <Link to="/insight" className="hover:text-white/85 transition-colors">Panduan PSPK 1/2</Link>
-                <Link to="/insight" className="hover:text-white/85 transition-colors">GRI &amp; IFRS S1/S2</Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-[10px] font-bold tracking-[0.22em] uppercase text-white/28 mb-5">Kontak</p>
-              <div className="flex flex-col gap-3 text-[13px] text-white/50 font-light">
-                <Link to="/login" className="hover:text-white/85 transition-colors">Client Portal</Link>
-                <a href="mailto:hello@bilmare.id" className="hover:text-white/85 transition-colors">hello@bilmare.id</a>
-                <span>Jakarta, Indonesia</span>
-              </div>
-            </div>
+            ))}
           </div>
 
           {/* Bottom */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 pt-10">
-            <img
-              src="/logo.png"
-              alt="Bilmare"
-              className="h-6 w-auto"
-              style={{ filter: 'brightness(0) invert(1)', opacity: 0.45 }}
-            />
-            <div className="text-[11px] text-white/28 font-light text-left md:text-right leading-relaxed">
-              <p>© {new Date().getFullYear()} Bilmare. Jakarta, Indonesia.</p>
-              <p className="mt-0.5">Firma Verifikasi Laporan Keberlanjutan</p>
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+            <img src="/logo.png" alt="Bilmare" style={{ height: 22, opacity: 0.35, filter: 'brightness(0) invert(1)' }} />
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>
+              © {new Date().getFullYear()} Bilmare · Jakarta, Indonesia · Firma Verifikasi Laporan Keberlanjutan
+            </p>
           </div>
-
         </div>
       </footer>
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { -webkit-font-smoothing: antialiased; }
+        .hidden-mobile { display: flex !important; }
+        .show-mobile { display: none !important; }
+        @media (max-width: 768px) {
+          .hidden-mobile { display: none !important; }
+          .show-mobile { display: flex !important; }
+          .footer-cta-grid { grid-template-columns: 1fr !important; }
+          .footer-links-grid { grid-template-columns: 1fr 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 }
