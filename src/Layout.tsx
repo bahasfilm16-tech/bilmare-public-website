@@ -1,204 +1,140 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 
-export const FadeIn = ({
-  children, delay = 0, className = '', direction = 'up', ...props
-}: {
-  children: React.ReactNode; delay?: number; className?: string;
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none'; [key: string]: any;
-}) => {
-  const y = direction === 'up' ? 24 : direction === 'down' ? -24 : 0;
-  const x = direction === 'left' ? 24 : direction === 'right' ? -24 : 0;
+export const FadeIn = ({ children, delay = 0, className = '', direction = 'up', ...props }: { children: React.ReactNode, delay?: number, className?: string, direction?: 'up' | 'down' | 'left' | 'right' | 'none', [key: string]: any }) => {
+  const yOffset = direction === 'up' ? 40 : direction === 'down' ? -40 : 0;
+  const xOffset = direction === 'left' ? 40 : direction === 'right' ? -40 : 0;
+  
   return (
     <motion.div
-      initial={{ opacity: 0, y, x }}
+      initial={{ opacity: 0, y: yOffset, x: xOffset }}
       whileInView={{ opacity: 1, y: 0, x: 0 }}
-      viewport={{ once: true, margin: '-6%' }}
-      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 1, delay, ease: [0.16, 1, 0.3, 1] }}
       className={className}
-      {...props}
     >
       {children}
     </motion.div>
   );
 };
 
-const NAV = [
-  { to: '/layanan', label: 'Layanan' },
-  { to: '/pendekatan', label: 'Pendekatan' },
-  { to: '/klien-kami', label: 'Klien Kami' },
-  { to: '/insight', label: 'Insight' },
-  { to: '/tentang-kami', label: 'Tentang Kami' },
-];
-
-const DARK_PAGES = ['/', '/klien-kami'];
-
 export default function Layout() {
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const darkHero = DARK_PAGES.includes(location.pathname);
-  const transparent = darkHero && !scrolled;
 
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 56);
-    window.addEventListener('scroll', fn, { passive: true });
-    return () => window.removeEventListener('scroll', fn);
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    setMenuOpen(false);
+    setMobileMenuOpen(false);
     window.scrollTo(0, 0);
-    setScrolled(false);
   }, [location.pathname]);
 
   return (
-    <div style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif", background: '#fff', color: '#0D1F33' }}>
-
-      {/* NAV */}
-      <header style={{
-        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-        transition: 'all 0.4s ease',
-        background: transparent ? 'transparent' : 'rgba(255,255,255,0.97)',
-        borderBottom: transparent ? 'none' : '1px solid rgba(13,31,51,0.07)',
-        backdropFilter: transparent ? 'none' : 'blur(16px)',
-        padding: scrolled ? '12px 0' : '20px 0',
-      }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link to="/">
-            <img src="/logo.png" alt="Bilmare" style={{
-              height: 28, width: 'auto',
-              filter: transparent ? 'brightness(0) invert(1)' : 'none',
-              transition: 'filter 0.4s ease'
-            }} />
+    <div className="min-h-screen bg-black text-white flex flex-col font-sans">
+      {/* Sleek Navigation */}
+      <header className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-black/80 backdrop-blur-xl py-4 border-b border-white/10' : 'bg-transparent py-8'}`}>
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between">
+          
+          <Link to="/" className="z-50 relative">
+            <img
+              src="/logo.png"
+              alt="Bilmare"
+              className="h-7 w-auto"
+              style={{ filter: 'brightness(0) invert(1)' }}
+            />
           </Link>
-
-          {/* Desktop */}
-          <nav style={{ display: 'flex', alignItems: 'center', gap: 36 }} className="hidden-mobile">
-            {NAV.map(({ to, label }) => (
-              <Link key={to} to={to} style={{
-                fontSize: 11, fontWeight: 600, letterSpacing: '0.16em',
-                textTransform: 'uppercase', textDecoration: 'none',
-                color: transparent ? 'rgba(255,255,255,0.65)' : 'rgba(13,31,51,0.55)',
-                transition: 'color 0.2s',
-              }}
-                onMouseEnter={e => (e.currentTarget.style.color = transparent ? '#fff' : '#0D1F33')}
-                onMouseLeave={e => (e.currentTarget.style.color = transparent ? 'rgba(255,255,255,0.65)' : 'rgba(13,31,51,0.55)')}
-              >{label}</Link>
-            ))}
-            <Link to="/login" style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '10px 22px', borderRadius: 100,
-              fontSize: 11, fontWeight: 700, letterSpacing: '0.16em',
-              textTransform: 'uppercase', textDecoration: 'none',
-              background: transparent ? 'rgba(255,255,255,0.12)' : '#0D1F33',
-              color: '#fff',
-              border: transparent ? '1px solid rgba(255,255,255,0.22)' : '1px solid transparent',
-              transition: 'all 0.2s',
-            }}>
-              Login <ArrowUpRight size={12} />
+          
+          <nav className="hidden md:flex items-center space-x-10 text-xs font-medium tracking-widest uppercase">
+            <Link to="/layanan" className="hover:text-neutral-400 transition-colors">Layanan</Link>
+            <Link to="/pendekatan" className="hover:text-neutral-400 transition-colors">Pendekatan</Link>
+            <Link to="/klien-kami" className="hover:text-neutral-400 transition-colors">Klien Kami</Link>
+            <Link to="/insight" className="hover:text-neutral-400 transition-colors">Insight</Link>
+            <Link to="/tentang-kami" className="hover:text-neutral-400 transition-colors">Tentang Kami</Link>
+            <Link to="/login" className="ml-4 px-6 py-2.5 bg-white text-black rounded-full hover:bg-neutral-200 transition-colors flex items-center gap-2">
+              Login <ArrowRight size={14} />
             </Link>
           </nav>
 
-          {/* Mobile burger */}
-          <button onClick={() => setMenuOpen(!menuOpen)} style={{
-            background: 'none', border: 'none', cursor: 'pointer', padding: 8,
-            color: transparent ? '#fff' : '#0D1F33', display: 'none',
-          }} className="show-mobile">
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          <button className="md:hidden p-2 -mr-2 z-50 relative text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </header>
 
-      {/* Mobile menu */}
+      {/* Fullscreen Mobile Menu */}
       <AnimatePresence>
-        {menuOpen && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ position: 'fixed', inset: 0, zIndex: 99, background: '#0D1F33', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 40px' }}>
-            {NAV.map(({ to, label }, i) => (
-              <motion.div key={to} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06 }}>
-                <Link to={to} style={{ display: 'block', fontSize: 32, fontWeight: 600, color: 'rgba(255,255,255,0.8)', textDecoration: 'none', marginBottom: 24, letterSpacing: '-0.01em' }}>{label}</Link>
-              </motion.div>
-            ))}
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.35 }}>
-              <Link to="/login" style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', textDecoration: 'none', marginTop: 16, display: 'inline-block' }}>Login →</Link>
-            </motion.div>
+        {mobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-40 bg-black pt-32 px-6 md:hidden flex flex-col"
+          >
+            <nav className="flex flex-col space-y-8 text-4xl font-medium tracking-tighter">
+              <Link to="/layanan" className="hover:text-neutral-400 transition-colors">Layanan</Link>
+              <Link to="/pendekatan" className="hover:text-neutral-400 transition-colors">Pendekatan</Link>
+              <Link to="/klien-kami" className="hover:text-neutral-400 transition-colors">Klien Kami</Link>
+              <Link to="/insight" className="hover:text-neutral-400 transition-colors">Insight</Link>
+              <Link to="/tentang-kami" className="hover:text-neutral-400 transition-colors">Tentang Kami</Link>
+              <Link to="/login" className="text-neutral-500 hover:text-white transition-colors">Login</Link>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <main><Outlet /></main>
+      <main className="flex-grow">
+        <Outlet />
+      </main>
 
-      {/* FOOTER */}
-      <footer style={{ background: '#0D1F33', color: '#fff', padding: '80px 40px 48px' }}>
-        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          {/* Top CTA */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 48, alignItems: 'end', paddingBottom: 56, borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 56 }}
-            className="footer-cta-grid">
+      {/* Massive Footer */}
+      <footer className="bg-black text-white pt-32 pb-12 px-6 md:px-12 border-t border-white/10">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-32">
             <div>
-              <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.28)', marginBottom: 16 }}>Mulai Percakapan</p>
-              <h2 style={{ fontSize: 'clamp(28px, 3vw, 40px)', fontWeight: 700, lineHeight: 1.18, letterSpacing: '-0.02em', color: '#fff', marginBottom: 16, maxWidth: 560 }}>
-                Kepercayaan masa depan dimulai dari pertanggungjawaban hari ini.
-              </h2>
-              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.42)', fontWeight: 300, lineHeight: 1.7, maxWidth: 440 }}>
-                PSPK 1/PSPK 2 berlaku efektif 1 Januari 2027. Jadwalkan asesmen awal — tanpa komitmen di tahap ini.
-              </p>
+              <h2 className="text-4xl md:text-6xl font-medium tracking-tighter mb-8">Siap memastikan laporan Anda tahan pengawasan?</h2>
+              <Link to="/layanan" className="inline-flex items-center space-x-3 text-sm font-medium tracking-widest uppercase border-b border-white pb-2 hover:text-neutral-400 hover:border-neutral-400 transition-colors group">
+                <span>Diskusikan Keterlibatan Anda</span>
+                <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+              </Link>
             </div>
-            <Link to="/layanan" style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: '#fff', color: '#0D1F33', padding: '14px 28px', borderRadius: 100,
-              fontSize: 11, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase',
-              textDecoration: 'none', whiteSpace: 'nowrap',
-            }}>Jadwalkan Asesmen <ArrowUpRight size={13} /></Link>
-          </div>
-
-          {/* Links */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 40, marginBottom: 56 }} className="footer-links-grid">
-            {[
-              { title: 'Layanan', links: [['Layanan', '/layanan'], ['PSPK Readiness Assessment', '/layanan'], ['Verification & Disclosure', '/layanan'], ['Full Report Development', '/layanan']] },
-              { title: 'Firma', links: [['Pendekatan', '/pendekatan'], ['Klien Kami', '/klien-kami'], ['Tentang Kami', '/tentang-kami']] },
-              { title: 'Sumber Daya', links: [['Insight', '/insight'], ['Panduan PSPK 1/2', '/insight'], ['GRI & IFRS S1/S2', '/insight']] },
-              { title: 'Kontak', links: [['Client Portal', '/login'], ['hello@bilmare.id', '#'], ['Jakarta, Indonesia', '#']] },
-            ].map(col => (
-              <div key={col.title}>
-                <p style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.25)', marginBottom: 20 }}>{col.title}</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {col.links.map(([label, to]) => (
-                    <Link key={label} to={to} style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', fontWeight: 300, textDecoration: 'none', transition: 'color 0.2s' }}
-                      onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.82)')}
-                      onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}
-                    >{label}</Link>
-                  ))}
-                </div>
+            <div className="grid grid-cols-2 gap-8 text-sm font-medium tracking-wide text-neutral-400">
+              <div className="flex flex-col space-y-4">
+                <Link to="/layanan" className="hover:text-white transition-colors">Layanan</Link>
+                <Link to="/pendekatan" className="hover:text-white transition-colors">Pendekatan</Link>
+                <Link to="/klien-kami" className="hover:text-white transition-colors">Klien Kami</Link>
               </div>
-            ))}
+              <div className="flex flex-col space-y-4">
+                <Link to="/insight" className="hover:text-white transition-colors">Insight</Link>
+                <Link to="/tentang-kami" className="hover:text-white transition-colors">Tentang Kami</Link>
+                <Link to="/login" className="hover:text-white transition-colors">Client Portal</Link>
+              </div>
+            </div>
           </div>
-
-          {/* Bottom */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
-            <img src="/logo.png" alt="Bilmare" style={{ height: 22, opacity: 0.35, filter: 'brightness(0) invert(1)' }} />
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.25)', fontWeight: 300 }}>
-              © {new Date().getFullYear()} Bilmare · Jakarta, Indonesia · Firma Verifikasi Laporan Keberlanjutan
-            </p>
+          
+          <div className="flex flex-col md:flex-row justify-between items-end border-t border-white/10 pt-12">
+            <div className="mb-8 md:mb-0">
+              <img
+                src="/logo.png"
+                alt="Bilmare"
+                className="h-16 w-auto"
+                style={{ filter: 'brightness(0) invert(1)' }}
+              />
+            </div>
+            <div className="text-sm text-neutral-500 text-right">
+              <p>&copy; {new Date().getFullYear()} Bilmare.</p>
+              <p>Jakarta, Indonesia.</p>
+            </div>
           </div>
         </div>
       </footer>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap');
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { -webkit-font-smoothing: antialiased; }
-        .hidden-mobile { display: flex !important; }
-        .show-mobile { display: none !important; }
-        @media (max-width: 768px) {
-          .hidden-mobile { display: none !important; }
-          .show-mobile { display: flex !important; }
-          .footer-cta-grid { grid-template-columns: 1fr !important; }
-          .footer-links-grid { grid-template-columns: 1fr 1fr !important; }
-        }
-      `}</style>
     </div>
   );
 }
