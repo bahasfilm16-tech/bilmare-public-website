@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import { FadeIn } from '../Layout';
 import { motion } from 'motion/react';
-import { ArrowRight, ArrowUpRight, Eye, EyeOff } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL || '';
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
@@ -14,6 +15,8 @@ const PORTAL_CLIENT = 'https://portal-client-delta.vercel.app/';
 
 // ─── Insight ──────────────────────────────────────────────────────────────────
 export function Insight() {
+  useScrollReveal();
+
   const articles = [
     {
       category: 'Panduan Praktis',
@@ -36,24 +39,30 @@ export function Insight() {
   ];
 
   return (
-    <div className="bg-[#FFFFFC] text-[#1C277B] min-h-screen">
+    <div style={{ background: 'white', color: 'var(--text-dark)', minHeight: '100vh' }}>
+
       {/* Header */}
-      <section className="relative overflow-hidden pt-32 pb-20 px-6 md:px-10 bg-[#FFFFFC]">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="mesh-1 absolute -top-40 -left-32 w-[600px] h-[600px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(35,76,249,0.1) 0%, transparent 70%)' }} />
-          <div className="mesh-3 absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(223,231,247,0.9) 0%, transparent 70%)' }} />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto">
+      <section className="bg-dark section-pad" style={{ paddingTop: '140px' }}>
+        <div className="container-bilmare">
           <FadeIn>
-            <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/15 px-4 py-2 rounded-full mb-6">
-              Insight
-            </span>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] text-[#1C277B] mb-5 max-w-3xl">
+            <div className="overline-white fade-in-up" style={{ marginBottom: '20px' }}>Insight</div>
+            <h1 style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: 'clamp(36px, 6vw, 64px)',
+              color: 'white',
+              maxWidth: '700px',
+              lineHeight: 1.1,
+              marginBottom: '20px',
+            }}>
               Analisis pelaporan yang dapat langsung diterapkan.
             </h1>
-            <p className="text-xl text-[#1C277B]/55 font-normal max-w-xl leading-relaxed">
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '18px',
+              color: 'rgba(255,255,255,0.7)',
+              maxWidth: '480px',
+              lineHeight: 1.7,
+            }}>
               Perspektif praktis dari lapangan — tentang standar, regulasi, dan risiko pengungkapan.
             </p>
           </FadeIn>
@@ -61,63 +70,108 @@ export function Insight() {
       </section>
 
       {/* Articles */}
-      <section className="py-20 px-6 md:px-10 bg-[#DFE7F7]">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <section className="bg-light section-pad">
+        <div className="container-bilmare">
+          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2px' }} id="articles-grid">
             {articles.map((a, i) => (
               <FadeIn key={i} delay={i * 0.1}>
                 <motion.div
-                  className="bg-white rounded-2xl p-7 h-full flex flex-col group cursor-pointer border border-[#1C277B]/5 hover:bg-[#1C277B] transition-colors duration-400"
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.25 }}
+                  style={{
+                    background: 'white',
+                    borderTop: '3px solid var(--mckinsey-blue)',
+                    padding: '40px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    cursor: 'pointer',
+                    transition: 'box-shadow 0.2s, transform 0.2s',
+                  }}
+                  whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(0,0,0,0.08)' }}
+                  transition={{ duration: 0.2 }}
                 >
-                  <div className="flex items-center justify-between mb-5">
-                    <span className="text-[10px] font-bold tracking-[0.18em] uppercase text-[#234CF9] group-hover:text-white/40 transition-colors">
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', alignItems: 'flex-start' }}>
+                    <span style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '10px',
+                      fontWeight: 700,
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      color: 'var(--mckinsey-blue)',
+                    }}>
                       {a.category}
                     </span>
-                    <span className="text-[10px] font-medium text-[#1C277B]/30 group-hover:text-white/30 transition-colors">
+                    <span style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '11px',
+                      color: 'var(--text-muted)',
+                    }}>
                       {a.time}
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold tracking-tight text-[#1C277B] group-hover:text-white mb-4 transition-colors leading-[1.25] flex-1">
+                  <h3 style={{
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '22px',
+                    color: 'var(--text-dark)',
+                    marginBottom: '16px',
+                    lineHeight: 1.3,
+                    flex: 1,
+                  }}>
                     {a.title}
                   </h3>
-                  <p className="text-sm text-[#1C277B]/55 group-hover:text-white/55 font-normal leading-relaxed mb-6 transition-colors">
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    color: 'var(--text-muted)',
+                    lineHeight: 1.7,
+                    marginBottom: '24px',
+                  }}>
                     {a.desc}
                   </p>
-                  <span className="inline-flex items-center gap-2 text-sm font-semibold text-[#234CF9] group-hover:text-white transition-colors mt-auto">
-                    Baca selengkapnya <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                  <span className="cta-link">
+                    Baca selengkapnya →
                   </span>
                 </motion.div>
               </FadeIn>
             ))}
           </div>
         </div>
+
+        <style>{`
+          @media (max-width: 1024px) {
+            #articles-grid { grid-template-columns: 1fr !important; }
+          }
+          @media (max-width: 640px) {
+            #articles-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-6 md:px-10 bg-[#FFFFFC]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-dark wave-overlay section-pad">
+        <div className="container-bilmare" style={{ position: 'relative', zIndex: 1 }}>
           <FadeIn>
-            <div className="bg-[#1C277B] rounded-2xl p-10 md:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 relative overflow-hidden">
-              <div
-                className="absolute -right-10 -top-10 w-[300px] h-[300px] rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(35,76,249,0.3) 0%, transparent 70%)' }}
-              />
-              <div className="relative">
-                <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight mb-3 leading-[1.2]">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '40px' }}>
+              <div>
+                <div className="overline-white" style={{ marginBottom: '16px' }}>Siap memulai?</div>
+                <h2 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: 'clamp(24px, 4vw, 44px)',
+                  color: 'white',
+                  marginBottom: '12px',
+                  lineHeight: 1.15,
+                }}>
                   Siap memahami kondisi laporan Anda?
                 </h2>
-                <p className="text-white/50 text-base font-normal">
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  color: 'rgba(255,255,255,0.6)',
+                  lineHeight: 1.7,
+                }}>
                   Mulai dengan percakapan awal — tidak ada komitmen di tahap ini.
                 </p>
               </div>
-              <Link
-                to="/layanan"
-                className="relative inline-flex items-center gap-2 bg-white text-[#1C277B] px-7 py-3.5 rounded-full text-sm font-bold hover:bg-[#DFE7F7] transition-colors shrink-0 group"
-              >
-                Lihat Layanan
-                <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <Link to="/layanan" className="btn-primary" style={{ flexShrink: 0 }}>
+                Lihat Layanan <ArrowRight size={15} />
               </Link>
             </div>
           </FadeIn>
@@ -129,88 +183,157 @@ export function Insight() {
 
 // ─── TentangKami ──────────────────────────────────────────────────────────────
 export function TentangKami() {
+  useScrollReveal();
+
   const values = [
     { title: 'BIL', full: 'Build Integrity in Layers', desc: 'Integritas pengungkapan dibangun melalui verifikasi berlapis — konsistensi data, keterlacakan klaim, dokumentasi metodologi.' },
     { title: 'MARE', full: 'Methodical Accuracy in Reporting Excellence', desc: 'Akurasi yang dapat dipertanggungjawabkan hanya dicapai melalui metodologi yang konsisten dan terdokumentasi.' },
   ];
 
   return (
-    <div className="bg-[#FFFFFC] text-[#1C277B] min-h-screen">
+    <div style={{ background: 'white', color: 'var(--text-dark)', minHeight: '100vh' }}>
+
       {/* Header */}
-      <section className="relative overflow-hidden pt-32 pb-20 px-6 md:px-10 bg-[#FFFFFC]">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="mesh-1 absolute -top-40 -left-32 w-[600px] h-[600px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(35,76,249,0.1) 0%, transparent 70%)' }} />
-          <div className="mesh-3 absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(223,231,247,0.9) 0%, transparent 70%)' }} />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto">
+      <section className="bg-dark section-pad" style={{ paddingTop: '140px' }}>
+        <div className="container-bilmare">
           <FadeIn>
-            <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/15 px-4 py-2 rounded-full mb-6">
-              Tentang Kami
-            </span>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] text-[#1C277B] mb-6 max-w-4xl">
+            <div className="overline-white fade-in-up" style={{ marginBottom: '20px' }}>Tentang Kami</div>
+            <h1 style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: 'clamp(36px, 6vw, 72px)',
+              color: 'white',
+              maxWidth: '700px',
+              lineHeight: 1.1,
+              marginBottom: '24px',
+            }}>
               Satu celah yang spesifik.
             </h1>
-            <p className="text-xl text-[#1C277B]/55 font-normal max-w-2xl leading-relaxed">
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '18px',
+              color: 'rgba(255,255,255,0.7)',
+              maxWidth: '600px',
+              lineHeight: 1.7,
+            }}>
               Kami mengisi satu celah yang spesifik. Tidak ada pihak yang secara spesifik bertugas memastikan laporan memiliki keterlacakan dan konsistensi yang memadai — sebelum laporan naik ke publik.
             </p>
           </FadeIn>
         </div>
       </section>
 
-      {/* Mission */}
-      <section className="py-20 md:py-28 px-6 md:px-10 bg-[#DFE7F7]">
-        <div className="max-w-7xl mx-auto">
+      {/* Name meaning / Mission */}
+      <section className="bg-white section-pad">
+        <div className="container-bilmare">
           <FadeIn>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              {values.map((v, i) => (
-                <motion.div
-                  key={i}
-                  className="bg-white rounded-2xl p-10 group hover:bg-[#1C277B] transition-colors duration-400 border border-[#1C277B]/5"
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  <div className="text-6xl font-black tracking-tight text-[#234CF9] group-hover:text-white transition-colors mb-5 leading-none">
-                    {v.title}
-                  </div>
-                  <h3 className="text-base font-bold text-[#1C277B] group-hover:text-white mb-4 tracking-tight transition-colors">
-                    {v.full}
-                  </h3>
-                  <p className="text-[#1C277B]/60 group-hover:text-white/60 font-normal leading-relaxed text-sm transition-colors">
-                    {v.desc}
-                  </p>
-                </motion.div>
-              ))}
+            <div className="fade-in-up" style={{ marginBottom: '56px' }}>
+              <div className="overline" style={{ marginBottom: '16px' }}>Nama & Makna</div>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: 'clamp(28px, 4vw, 44px)',
+                color: 'var(--text-dark)',
+                lineHeight: 1.2,
+              }}>
+                Di balik nama Bilmare.
+              </h2>
             </div>
           </FadeIn>
+          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }} id="values-grid">
+            {values.map((v, i) => (
+              <motion.div
+                key={i}
+                style={{
+                  padding: '56px 48px',
+                  borderTop: '3px solid var(--mckinsey-blue)',
+                  background: 'var(--off-white)',
+                  transition: 'background 0.3s',
+                }}
+                whileHover={{ background: 'var(--deep-navy)' } as any}
+                transition={{ duration: 0.3 }}
+              >
+                <div style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: 'clamp(48px, 8vw, 72px)',
+                  fontWeight: 700,
+                  color: 'var(--mckinsey-blue)',
+                  lineHeight: 1,
+                  marginBottom: '20px',
+                }}>
+                  {v.title}
+                </div>
+                <h3 style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '15px',
+                  fontWeight: 600,
+                  color: 'var(--text-dark)',
+                  marginBottom: '16px',
+                  lineHeight: 1.5,
+                }}>
+                  {v.full}
+                </h3>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '14px',
+                  color: 'var(--text-muted)',
+                  lineHeight: 1.7,
+                }}>
+                  {v.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
+
+        <style>{`
+          @media (max-width: 768px) {
+            #values-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </section>
 
       {/* Positioning */}
-      <section className="py-20 md:py-28 px-6 md:px-10 bg-[#FFFFFC]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-light section-pad">
+        <div className="container-bilmare">
           <FadeIn>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'flex-start' }} className="positioning-grid">
               <div>
-                <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/15 px-4 py-2 rounded-full mb-6">
-                  Posisi Bilmare
-                </span>
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#1C277B] leading-[1.15] mb-6">
+                <div className="overline" style={{ marginBottom: '16px' }}>Posisi Bilmare</div>
+                <h2 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: 'clamp(28px, 3.5vw, 44px)',
+                  color: 'var(--text-dark)',
+                  marginBottom: '24px',
+                  lineHeight: 1.2,
+                }}>
                   Bukan assurance provider. Bukan agency desain.
                 </h2>
-                <p className="text-lg text-[#1C277B]/55 font-normal leading-relaxed mb-8">
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  color: 'var(--text-muted)',
+                  lineHeight: 1.8,
+                  marginBottom: '32px',
+                }}>
                   Bilmare mengisi satu celah yang spesifik: memastikan setiap klaim dalam laporan Anda memiliki keterlacakan dan konsistensi yang memadai — sebelum laporan naik ke publik.
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                   {['Verification-led', 'Pre-assurance specialist', 'Bukan agency kreatif', 'Bukan auditor'].map((tag) => (
-                    <span key={tag} className="text-[11px] font-semibold tracking-wide uppercase text-[#1C277B]/50 border border-[#1C277B]/15 px-4 py-2 rounded-full">
+                    <span key={tag} style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      letterSpacing: '0.1em',
+                      textTransform: 'uppercase',
+                      color: 'var(--text-muted)',
+                      border: '1px solid var(--line)',
+                      padding: '6px 14px',
+                    }}>
                       {tag}
                     </span>
                   ))}
                 </div>
               </div>
-              <div className="space-y-3">
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                 {[
                   { who: 'Agency kreatif', what: 'Menulis narasi dan mendesain laporan' },
                   { who: 'Bilmare', what: 'Memverifikasi setiap klaim memiliki keterlacakan', highlight: true },
@@ -219,14 +342,28 @@ export function TentangKami() {
                 ].map((row) => (
                   <div
                     key={row.who}
-                    className={`flex items-center justify-between p-5 rounded-xl ${
-                      row.highlight ? 'bg-[#1C277B] text-white' : 'bg-[#DFE7F7] text-[#1C277B]'
-                    }`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '18px 24px',
+                      background: row.highlight ? 'var(--deep-navy)' : 'white',
+                      borderLeft: `3px solid ${row.highlight ? 'var(--mckinsey-blue)' : 'transparent'}`,
+                    }}
                   >
-                    <span className={`font-bold text-sm ${row.highlight ? 'text-white' : 'text-[#1C277B]'}`}>
+                    <span style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      color: row.highlight ? 'white' : 'var(--text-dark)',
+                    }}>
                       {row.who}
                     </span>
-                    <span className={`text-sm font-normal ${row.highlight ? 'text-white/70' : 'text-[#1C277B]/55'}`}>
+                    <span style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '13px',
+                      color: row.highlight ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)',
+                    }}>
                       {row.what}
                     </span>
                   </div>
@@ -235,30 +372,51 @@ export function TentangKami() {
             </div>
           </FadeIn>
         </div>
+
+        <style>{`
+          @media (max-width: 1024px) {
+            .positioning-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+          }
+        `}</style>
       </section>
 
       {/* CTA */}
-      <section className="py-20 md:py-28 px-6 md:px-10 bg-[#1C277B] relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="mesh-1 absolute -top-20 right-0 w-[500px] h-[500px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(35,76,249,0.35) 0%, transparent 70%)' }} />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-10">
-          <div>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4 leading-[1.1]">
-              Kenali lebih jauh cara kerja kami.
-            </h2>
-            <p className="text-lg text-white/50 font-normal max-w-xl leading-relaxed">
-              Lihat metodologi dan layanan yang Bilmare tawarkan untuk laporan Anda.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3 shrink-0">
-            <Link to="/layanan" className="inline-flex items-center gap-2 bg-white text-[#1C277B] px-7 py-3.5 rounded-full text-sm font-bold hover:bg-[#DFE7F7] transition-colors group">
-              Lihat Layanan <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-            <Link to="/pendekatan" className="inline-flex items-center gap-2 border border-white/20 text-white/70 px-7 py-3.5 rounded-full text-sm font-semibold hover:border-white/40 hover:text-white transition-colors">
-              Metodologi
-            </Link>
+      <section className="bg-dark wave-overlay section-pad">
+        <div className="container-bilmare" style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '40px' }}>
+            <FadeIn>
+              <div>
+                <div className="overline-white" style={{ marginBottom: '16px' }}>Cara Kerja Kami</div>
+                <h2 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: 'clamp(24px, 4vw, 44px)',
+                  color: 'white',
+                  marginBottom: '12px',
+                  lineHeight: 1.15,
+                }}>
+                  Kenali lebih jauh cara kerja kami.
+                </h2>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '16px',
+                  color: 'rgba(255,255,255,0.6)',
+                  maxWidth: '480px',
+                  lineHeight: 1.7,
+                }}>
+                  Lihat metodologi dan layanan yang Bilmare tawarkan untuk laporan Anda.
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.15}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', flexShrink: 0 }}>
+                <Link to="/layanan" className="btn-primary">
+                  Lihat Layanan <ArrowRight size={15} />
+                </Link>
+                <Link to="/pendekatan" className="btn-secondary">
+                  Metodologi
+                </Link>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
@@ -332,99 +490,171 @@ export function Login() {
   };
 
   return (
-    <div className="bg-[#FFFFFC] text-[#1C277B] min-h-screen flex">
-      {/* Left panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-[#1C277B] relative overflow-hidden flex-col justify-between p-14">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="mesh-1 absolute -top-20 -left-20 w-[500px] h-[500px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(35,76,249,0.35) 0%, transparent 70%)' }} />
-          <div className="mesh-3 absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(35,76,249,0.15) 0%, transparent 70%)' }} />
-        </div>
-        <div className="relative z-10">
-          <img
-            src="/logo.png"
-            alt="Bilmare"
-            className="h-8 w-auto mb-16"
-            style={{ filter: 'brightness(0) invert(1)' }}
-          />
-          <h2 className="text-4xl font-bold text-white tracking-tight leading-[1.2] mb-5">
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      background: 'white',
+      color: 'var(--text-dark)',
+    }}>
+      {/* Left panel — dark brand side */}
+      <div style={{
+        display: 'none',
+        width: '50%',
+        background: 'var(--deep-navy)',
+        position: 'relative',
+        overflow: 'hidden',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: '64px',
+      }} className="login-left">
+        <div className="glow-blob" style={{ top: '-100px', left: '-80px', width: '400px', height: '400px' }} />
+        <div className="glow-blob" style={{ bottom: '-80px', right: '-60px', width: '320px', height: '320px' }} />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '24px',
+            fontWeight: 700,
+            color: 'white',
+            marginBottom: '64px',
+          }}>
+            Bilmare
+          </div>
+          <div className="overline-white" style={{ marginBottom: '20px' }}>Portal Akses</div>
+          <h2 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: 'clamp(28px, 3.5vw, 44px)',
+            color: 'white',
+            lineHeight: 1.2,
+            marginBottom: '20px',
+          }}>
             Portal Klien &<br />Tim Bilmare
           </h2>
-          <p className="text-white/55 text-lg font-normal leading-relaxed max-w-sm">
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '16px',
+            color: 'rgba(255,255,255,0.6)',
+            lineHeight: 1.7,
+            maxWidth: '340px',
+          }}>
             Masuk untuk mengakses laporan, status engagement, dan dokumentasi verifikasi Anda.
           </p>
         </div>
-        <div className="relative z-10 space-y-4">
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
           {[
             { label: 'Keamanan', value: 'End-to-end encrypted' },
             { label: 'Akses', value: 'Role-based portal routing' },
             { label: 'Data', value: 'Diproteksi Supabase RLS' },
           ].map((item) => (
-            <div key={item.label} className="flex items-center justify-between border-t border-white/10 pt-4">
-              <span className="text-xs font-semibold tracking-widest uppercase text-white/35">{item.label}</span>
-              <span className="text-sm font-medium text-white/65">{item.value}</span>
+            <div key={item.label} style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              borderTop: '1px solid rgba(255,255,255,0.1)',
+              paddingTop: '16px',
+              marginTop: '16px',
+            }}>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '11px', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)' }}>
+                {item.label}
+              </span>
+              <span style={{ fontFamily: 'Inter, sans-serif', fontSize: '13px', color: 'rgba(255,255,255,0.65)' }}>
+                {item.value}
+              </span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Right panel — form */}
-      <div className="flex-1 flex items-center justify-center px-6 py-20 lg:py-0">
-        <div className="w-full max-w-sm">
-          {/* Mobile logo */}
-          <div className="lg:hidden mb-10">
-            <Link to="/">
-              <img
-                src="/logo.png"
-                alt="Bilmare"
-                className="h-7 w-auto"
-                style={{ filter: 'brightness(0) saturate(100%) invert(13%) sepia(70%) saturate(1500%) hue-rotate(218deg) brightness(65%) contrast(120%)' }}
-              />
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '80px 40px',
+      }}>
+        <div style={{ width: '100%', maxWidth: '360px' }}>
+
+          {/* Mobile wordmark */}
+          <div className="login-mobile-logo" style={{ marginBottom: '48px' }}>
+            <Link to="/" style={{ textDecoration: 'none' }}>
+              <span style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: '22px',
+                fontWeight: 700,
+                color: 'var(--deep-navy)',
+              }}>
+                Bilmare
+              </span>
             </Link>
           </div>
 
-          <h1 className="text-3xl font-bold tracking-tight text-[#1C277B] mb-2">Masuk ke akun Anda</h1>
-          <p className="text-[#1C277B]/45 font-normal text-base mb-10">
+          <div className="overline" style={{ marginBottom: '12px' }}>Portal Login</div>
+          <h1 style={{
+            fontFamily: 'Georgia, serif',
+            fontSize: '32px',
+            color: 'var(--text-dark)',
+            marginBottom: '8px',
+            lineHeight: 1.2,
+          }}>
+            Masuk ke akun Anda
+          </h1>
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '15px',
+            color: 'var(--text-muted)',
+            marginBottom: '40px',
+            lineHeight: 1.5,
+          }}>
             Portal akan diarahkan sesuai peran Anda.
           </p>
 
-          <form className="space-y-5" onSubmit={handleLogin}>
+          <form style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} onSubmit={handleLogin}>
+
             {/* Email */}
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.18em] text-[#1C277B]/45 mb-2">
-                Email
-              </label>
+              <label className="mckinsey-form-label">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={loading}
-                className="w-full bg-[#DFE7F7]/50 border border-[#1C277B]/12 rounded-xl px-4 py-3.5 text-[#1C277B] placeholder:text-[#1C277B]/30 focus:outline-none focus:border-[#234CF9] focus:bg-[#234CF9]/4 transition-all text-sm disabled:opacity-50"
+                className="mckinsey-form-field"
                 placeholder="nama@perusahaan.com"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.18em] text-[#1C277B]/45 mb-2">
-                Password
-              </label>
-              <div className="relative">
+              <label className="mckinsey-form-label">Password</label>
+              <div style={{ position: 'relative' }}>
                 <input
                   type={showPass ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   disabled={loading}
-                  className="w-full bg-[#DFE7F7]/50 border border-[#1C277B]/12 rounded-xl px-4 py-3.5 pr-12 text-[#1C277B] placeholder:text-[#1C277B]/30 focus:outline-none focus:border-[#234CF9] focus:bg-[#234CF9]/4 transition-all text-sm disabled:opacity-50"
+                  className="mckinsey-form-field"
                   placeholder="••••••••"
+                  style={{ paddingRight: '44px' }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(!showPass)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#1C277B]/35 hover:text-[#1C277B]/70 transition-colors"
+                  style={{
+                    position: 'absolute',
+                    right: '12px',
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    color: 'var(--text-muted)',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
                   aria-label="Toggle password visibility"
                 >
                   {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -437,15 +667,28 @@ export function Login() {
               <motion.div
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="py-3 px-4 bg-red-50 border border-red-200 rounded-xl"
+                style={{
+                  padding: '12px 16px',
+                  background: '#fef2f2',
+                  border: '1px solid #fecaca',
+                  borderLeft: '3px solid #ef4444',
+                }}
               >
-                <p className="text-sm text-red-600 font-medium">{error}</p>
+                <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '14px', color: '#dc2626' }}>{error}</p>
               </motion.div>
             )}
 
             {/* Forgot */}
-            <div className="flex justify-end">
-              <a href="#" className="text-[11px] font-semibold text-[#234CF9] hover:opacity-70 transition-opacity uppercase tracking-widest">
+            <div style={{ textAlign: 'right' }}>
+              <a href="#" style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '11px',
+                fontWeight: 600,
+                color: 'var(--mckinsey-blue)',
+                textDecoration: 'none',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em',
+              }}>
                 Lupa password?
               </a>
             </div>
@@ -454,11 +697,19 @@ export function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#234CF9] text-white py-4 rounded-full text-sm font-bold hover:bg-[#1a3de8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg shadow-[#234CF9]/25 mt-2"
+              className="btn-primary"
+              style={{
+                width: '100%',
+                justifyContent: 'center',
+                padding: '16px 28px',
+                opacity: loading ? 0.5 : 1,
+                cursor: loading ? 'not-allowed' : 'pointer',
+                marginTop: '8px',
+              }}
             >
               {loading ? (
                 <>
-                  <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <svg className="animate-spin" style={{ height: '16px', width: '16px' }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                   </svg>
@@ -468,14 +719,31 @@ export function Login() {
             </button>
           </form>
 
-          <p className="text-center text-[11px] text-[#1C277B]/35 mt-8 font-normal">
+          <p style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '12px',
+            color: 'var(--text-muted)',
+            textAlign: 'center',
+            marginTop: '32px',
+          }}>
             Belum memiliki akses?{' '}
-            <Link to="/layanan" className="text-[#234CF9] font-semibold hover:opacity-70 transition-opacity">
+            <Link to="/layanan" style={{
+              color: 'var(--mckinsey-blue)',
+              fontWeight: 600,
+              textDecoration: 'none',
+            }}>
               Hubungi tim Bilmare
             </Link>
           </p>
         </div>
       </div>
+
+      <style>{`
+        @media (min-width: 1024px) {
+          .login-left { display: flex !important; }
+          .login-mobile-logo { display: none !important; }
+        }
+      `}</style>
     </div>
   );
 }

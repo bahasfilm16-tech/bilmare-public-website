@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ArrowUpRight, CheckCircle, ChevronRight } from 'lucide-react';
+import { ArrowRight, CheckCircle } from 'lucide-react';
 import { FadeIn } from '../Layout';
 import { motion } from 'motion/react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
+import { PlaceholderImage } from '../components/PlaceholderImage';
 
 // ─── Stat Counter ─────────────────────────────────────────────────────────────
 function StatCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
@@ -38,12 +40,23 @@ function StatCounter({ value, suffix = '' }: { value: number; suffix?: string })
 function Ticker({ items }: { items: string[] }) {
   const doubled = [...items, ...items];
   return (
-    <div className="overflow-hidden w-full py-4 border-y border-[#1C277B]/10 bg-[#DFE7F7]">
+    <div className="ticker-bar">
       <div className="flex gap-10 whitespace-nowrap animate-marquee w-max">
         {doubled.map((item, i) => (
-          <span key={i} className="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#1C277B]/45 shrink-0 flex items-center gap-10">
+          <span key={i} style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '11px',
+            fontWeight: 600,
+            letterSpacing: '0.22em',
+            textTransform: 'uppercase',
+            color: 'var(--text-muted)',
+            flexShrink: 0,
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '40px',
+          }}>
             {item}
-            <span className="w-1 h-1 rounded-full bg-[#234CF9]/40 inline-block" />
+            <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--mckinsey-blue)', display: 'inline-block', opacity: 0.5 }} />
           </span>
         ))}
       </div>
@@ -51,28 +64,10 @@ function Ticker({ items }: { items: string[] }) {
   );
 }
 
-// ─── Mesh Gradient Background ─────────────────────────────────────────────────
-function MeshBg({ dark = false }: { dark?: boolean }) {
-  const blue = dark ? 'rgba(35,76,249,0.35)' : 'rgba(35,76,249,0.12)';
-  const navy = dark ? 'rgba(28,39,123,0.35)' : 'rgba(28,39,123,0.08)';
-  const sky  = dark ? 'rgba(223,231,247,0.12)' : 'rgba(223,231,247,0.9)';
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <div className="mesh-1 absolute -top-40 -left-32 w-[700px] h-[700px] rounded-full"
-        style={{ background: `radial-gradient(circle, ${blue} 0%, transparent 70%)` }} />
-      <div className="mesh-2 absolute top-20 right-0 w-[550px] h-[550px] rounded-full"
-        style={{ background: `radial-gradient(circle, ${navy} 0%, transparent 70%)` }} />
-      <div className="mesh-3 absolute bottom-0 left-1/3 w-[480px] h-[480px] rounded-full"
-        style={{ background: `radial-gradient(circle, ${sky} 0%, transparent 70%)` }} />
-      <div className="mesh-1 absolute -bottom-20 right-1/4 w-[380px] h-[380px] rounded-full"
-        style={{ background: `radial-gradient(circle, ${blue} 0%, transparent 70%)`, animationDelay: '-7s' }} />
-    </div>
-  );
-}
-
 // ─── Home ─────────────────────────────────────────────────────────────────────
 export default function Home() {
+  useScrollReveal();
+
   const standards = [
     'GRI Standards 2021', 'IFRS S1 & S2', 'POJK Keuangan Berkelanjutan',
     'SEOJK 16/2021', 'PSAK Keberlanjutan', 'TCFD Recommendations',
@@ -105,7 +100,7 @@ export default function Home() {
 
   const services = [
     {
-      tier: 'Tier 1',
+      tag: 'TIER 1',
       title: 'Verification & Disclosure Readiness',
       subtitle: 'Draft laporan sudah ada. Diperlukan lapisan verifikasi independen sebelum publikasi atau proses assurance.',
       bullets: [
@@ -114,9 +109,12 @@ export default function Home() {
         'Disclosure Risk & Gap Register',
         'IR FAQ Databook bersumber',
       ],
+      duration: '4–8 minggu',
+      photo: '/images/service-tier1.jpg',
+      photoAlt: 'Verification & Disclosure Readiness',
     },
     {
-      tier: 'Tier 2',
+      tag: 'TIER 2',
       title: 'Full Accountable Report Development',
       subtitle: 'Draft belum ada. Laporan disusun dari awal dengan verifikasi data yang berjalan bersamaan dengan penulisan.',
       bullets: [
@@ -125,37 +123,51 @@ export default function Home() {
         'Penyusunan draft dengan dokumentasi bersamaan',
         'QC gate berlapis sebelum serah terima',
       ],
+      duration: '10–16 minggu',
+      photo: '/images/service-tier2.jpg',
+      photoAlt: 'Full Accountable Report Development',
     },
   ];
 
+  const stats = [
+    { value: 956, suffix: '',     label: 'Emiten BEI (Apr 2026)' },
+    { value: 6,   suffix: '%',    label: 'Sudah di-assure' },
+    { value: 9,   suffix: ' bln', label: 'Sebelum PSPK efektif' },
+    { value: 850, suffix: '+',    label: 'Emiten belum siap' },
+  ];
+
   return (
-    <div className="flex flex-col bg-[#FFFFFC] text-[#1C277B]">
+    <div style={{ display: 'flex', flexDirection: 'column', background: 'white', color: 'var(--text-dark)' }}>
 
       {/* ════════════════════════════════════════════════════════════════
           HERO
       ════════════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-[#FFFFFC] pt-20">
-        <MeshBg />
-
-        {/* Subtle grid texture */}
-        <div
-          className="absolute inset-0 opacity-[0.025] pointer-events-none"
-          style={{
-            backgroundImage: `linear-gradient(rgba(28,39,123,1) 1px, transparent 1px), linear-gradient(90deg, rgba(28,39,123,1) 1px, transparent 1px)`,
-            backgroundSize: '64px 64px',
-          }}
+      <section className="bg-hero wave-overlay photo-section-bg" style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
+        <img
+          src="/images/hero-bg.jpg"
+          alt="Bilmare team"
+          className="photo-bg-img"
+          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
         />
+        <div className="photo-bg-overlay" />
+        <div className="glow-blob" style={{ top: '-100px', right: '-100px' }} />
 
-        <div className="relative z-10 px-6 md:px-10 max-w-7xl w-full mx-auto py-20">
-          {/* Badge */}
+        <div className="photo-section-content container-bilmare" style={{
+          paddingTop: '140px',
+          paddingBottom: '100px',
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}>
+          {/* Overline badge */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-8"
+            style={{ marginBottom: '24px' }}
           >
-            <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/20 px-4 py-2 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#234CF9] animate-pulse" />
+            <span className="overline-white">
               PSPK 1/PSPK 2 — Berlaku 1 Januari 2027
             </span>
           </motion.div>
@@ -165,11 +177,17 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.85, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-[68px] lg:text-[80px] font-bold tracking-tight leading-[1.06] text-[#1C277B] mb-7 max-w-5xl"
+            style={{
+              fontFamily: 'Georgia, "Times New Roman", serif',
+              fontSize: 'clamp(40px, 6vw, 80px)',
+              fontWeight: 700,
+              color: 'white',
+              maxWidth: '760px',
+              marginBottom: '24px',
+              lineHeight: 1.1,
+            }}
           >
-            Laporan yang siap<br />
-            <span className="text-[#234CF9]">dipertanyakan</span> —<br />
-            sebelum pertanyaan datang.
+            Laporan yang siap dipertanyakan — sebelum pertanyaan datang.
           </motion.h1>
 
           {/* Subheadline */}
@@ -177,10 +195,17 @@ export default function Home() {
             initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="text-lg md:text-xl font-normal text-[#1C277B]/55 max-w-2xl leading-relaxed mb-10"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '18px',
+              color: 'rgba(255,255,255,0.75)',
+              maxWidth: '620px',
+              lineHeight: 1.7,
+              marginBottom: '48px',
+            }}
           >
-            Bilmare adalah firma verifikasi laporan keberlanjutan yang memastikan setiap klaim terlacak,
-            konsisten, dan terdokumentasi — sebelum auditor, regulator, atau investor mempertanyakannya.
+            Kami memverifikasi setiap klaim dalam laporan keberlanjutan Anda — memastikan keterlacakan,
+            konsistensi, dan dokumentasi yang memadai sebelum auditor, regulator, atau investor mempertanyakannya.
           </motion.p>
 
           {/* CTAs */}
@@ -188,43 +213,14 @@ export default function Home() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-wrap gap-3"
+            style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}
           >
-            <Link
-              to="/layanan"
-              className="inline-flex items-center gap-2 bg-[#234CF9] text-white px-7 py-3.5 rounded-full text-sm font-semibold hover:bg-[#1a3de8] transition-all shadow-lg shadow-[#234CF9]/30 group"
-            >
-              Lihat Layanan
-              <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+            <Link to="/layanan" className="btn-primary">
+              Lihat Layanan <ArrowRight size={15} />
             </Link>
-            <Link
-              to="/pendekatan"
-              className="inline-flex items-center gap-2 border border-[#1C277B]/20 text-[#1C277B] px-7 py-3.5 rounded-full text-sm font-semibold hover:bg-[#1C277B]/5 hover:border-[#1C277B]/35 transition-all"
-            >
+            <Link to="/pendekatan" className="btn-secondary">
               Metodologi Kami
             </Link>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-px bg-[#1C277B]/8 rounded-2xl overflow-hidden border border-[#1C277B]/8"
-          >
-            {[
-              { value: 956, suffix: '',    label: 'Emiten BEI (Apr 2026)' },
-              { value: 6,   suffix: '%',   label: 'Sudah di-assure' },
-              { value: 9,   suffix: ' bln',label: 'Sebelum PSPK efektif' },
-              { value: 850, suffix: '+',   label: 'Emiten belum siap' },
-            ].map((s, i) => (
-              <div key={i} className="bg-[#FFFFFC]/85 backdrop-blur-sm px-7 py-6">
-                <div className="text-3xl md:text-4xl font-bold text-[#1C277B] mb-1">
-                  <StatCounter value={s.value} suffix={s.suffix} />
-                </div>
-                <p className="text-[11px] text-[#1C277B]/40 font-medium uppercase tracking-widest">{s.label}</p>
-              </div>
-            ))}
           </motion.div>
         </div>
       </section>
@@ -235,250 +231,451 @@ export default function Home() {
       <Ticker items={standards} />
 
       {/* ════════════════════════════════════════════════════════════════
-          POSITIONING
+          STATS / URGENCY
       ════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-36 px-6 md:px-10 bg-[#FFFFFC]">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="bg-light section-pad">
+        <div className="container-bilmare">
+          <FadeIn>
+            <div className="fade-in-up" style={{ marginBottom: '64px' }}>
+              <div className="overline" style={{ marginBottom: '16px' }}>Konteks Regulasi</div>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: 'clamp(28px, 4vw, 48px)',
+                color: 'var(--text-dark)',
+                maxWidth: '680px',
+                lineHeight: 1.2,
+              }}>
+                Pasar yang belum siap. Tenggat yang tidak bergeser.
+              </h2>
+            </div>
+          </FadeIn>
+
+          {/* Stat grid */}
+          <div className="fade-in-up" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '40px',
+            marginBottom: '64px',
+          }}>
+            {stats.map((s, i) => (
+              <FadeIn key={i} delay={i * 0.08}>
+                <div>
+                  <div className="stat-number">
+                    <StatCounter value={s.value} suffix={s.suffix} />
+                  </div>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '13px',
+                    color: 'var(--text-muted)',
+                    marginTop: '12px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    fontWeight: 500,
+                  }}>
+                    {s.label}
+                  </p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+
+          {/* 2-col explanation */}
+          <FadeIn>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px' }} className="stats-cols">
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', color: 'var(--text-muted)', lineHeight: 1.8, maxWidth: '520px' }}>
+                PSPK 1 dan PSPK 2 — Pedoman Standar Pengungkapan Keberlanjutan — adalah perubahan terbesar
+                dalam pelaporan emiten Indonesia sejak SEOJK 16/2021. Berlaku efektif 1 Januari 2027, dengan
+                implementasi bertahap yang dimulai jauh sebelum tenggat resmi.
+              </p>
+              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', color: 'var(--text-muted)', lineHeight: 1.8, maxWidth: '520px' }}>
+                Mayoritas emiten belum memiliki sistem verifikasi data dan dokumentasi metodologi yang memadai.
+                Bilmare hadir spesifik untuk mengisi celah ini — sebelum assurance provider menemukan temuan,
+                sebelum OJK mempertanyakan laporan yang sudah terbit.
+              </p>
+            </div>
+          </FadeIn>
+        </div>
+
+        <style>{`
+          @media (max-width: 768px) {
+            .stats-cols { grid-template-columns: 1fr !important; }
+          }
+          @media (max-width: 640px) {
+            .fade-in-up[style*="grid-template-columns: repeat(4"] {
+              grid-template-columns: repeat(2, 1fr) !important;
+            }
+          }
+        `}</style>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════
+          EDITORIAL PHOTO STRIP
+      ════════════════════════════════════════════════════════════════ */}
+      <section style={{ background: '#030f1a', padding: '0' }}>
+        <div className="container-bilmare">
+          <PlaceholderImage
+            src="/images/client-context.jpg"
+            alt="Konteks pasar Indonesia"
+            className="photo-wide"
+            overlayLabel="Konteks Regulasi"
+            overlayTitle="PSPK 1/PSPK 2 — Perubahan terbesar dalam pelaporan emiten Indonesia sejak SEOJK 16/2021."
+          />
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════
+          WHY BILMARE (Positioning)
+      ════════════════════════════════════════════════════════════════ */}
+      <section className="bg-white" style={{ padding: '0' }}>
+        <div className="split-section">
+          <div className="split-text">
             <FadeIn>
-              <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/15 px-4 py-2 rounded-full mb-6">
-                Tentang Bilmare
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.15] text-[#1C277B]">
+              <div className="overline" style={{ marginBottom: '20px' }}>Tentang Bilmare</div>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: 'clamp(28px, 3.5vw, 48px)',
+                color: 'var(--text-dark)',
+                marginBottom: '24px',
+                lineHeight: 1.2,
+              }}>
                 Satu-satunya firma di Indonesia yang mengkhususkan diri mempersiapkan laporan emiten menghadapi PSPK 1/PSPK 2.
               </h2>
-            </FadeIn>
-            <FadeIn delay={0.15}>
-              <p className="text-lg text-[#1C277B]/55 font-normal leading-relaxed mb-8">
+              <p style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '16px',
+                color: 'var(--text-muted)',
+                lineHeight: 1.8,
+                marginBottom: '32px',
+              }}>
                 Bukan assurance provider. Bukan agency desain laporan. Bilmare mengisi satu celah yang
                 spesifik: memastikan setiap klaim dalam laporan Anda memiliki keterlacakan dan konsistensi
                 yang memadai — sebelum laporan naik ke publik.
               </p>
-              <div className="flex flex-wrap gap-2">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
                 {['Verification-led', 'Bukan assurance provider', 'Bukan agency kreatif'].map((tag) => (
-                  <span key={tag} className="text-[11px] font-semibold tracking-wide uppercase text-[#1C277B]/50 border border-[#1C277B]/15 px-4 py-2 rounded-full">
+                  <span key={tag} style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: 'var(--text-muted)',
+                    border: '1px solid var(--line)',
+                    padding: '6px 14px',
+                  }}>
                     {tag}
                   </span>
                 ))}
               </div>
             </FadeIn>
           </div>
+          <PlaceholderImage
+            src="/images/about-team.jpg"
+            alt="Tim Bilmare"
+            className="split-photo"
+          />
         </div>
       </section>
 
       {/* ════════════════════════════════════════════════════════════════
-          PROBLEMS
+          PROBLEMS (Why Bilmare / Differentiators)
       ════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-36 px-6 md:px-10 bg-[#DFE7F7]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-dark wave-overlay section-pad">
+        <div className="container-bilmare" style={{ position: 'relative', zIndex: 1 }}>
           <FadeIn>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
-              <div>
-                <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/15 px-4 py-2 rounded-full mb-5">
-                  Situasi yang Kami Selesaikan
-                </span>
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#1C277B] max-w-xl leading-[1.15]">
-                  Tiga kondisi yang berulang setiap siklus pelaporan.
-                </h2>
-              </div>
-              <Link
-                to="/pendekatan"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-[#234CF9] hover:opacity-70 transition-opacity shrink-0 group"
-              >
-                Lihat pendekatan
-                <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-              </Link>
+            <div className="fade-in-up" style={{ marginBottom: '64px' }}>
+              <div className="overline-white" style={{ marginBottom: '16px' }}>Situasi yang Kami Selesaikan</div>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: 'clamp(28px, 4vw, 48px)',
+                color: 'white',
+                maxWidth: '640px',
+                lineHeight: 1.2,
+              }}>
+                Tiga kondisi yang berulang setiap siklus pelaporan.
+              </h2>
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }} id="problems-grid">
             {problems.map((item, i) => (
               <FadeIn key={i} delay={i * 0.1}>
-                <motion.div
-                  className="bg-white rounded-2xl p-8 md:p-10 group hover:bg-[#1C277B] transition-colors duration-500 cursor-default border border-[#1C277B]/5 h-full"
-                  whileHover={{ y: -6 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <span className="text-[72px] font-bold text-[#1C277B]/5 leading-none block mb-5 group-hover:text-white/5 transition-colors">
-                    {item.num}
-                  </span>
-                  <h3 className="text-xl font-bold tracking-tight text-[#1C277B] mb-3 leading-snug group-hover:text-white transition-colors">
+                <div className="layer-step">
+                  <div className="layer-step-number">{item.num}</div>
+                  <h3 style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '18px',
+                    fontWeight: 600,
+                    color: 'white',
+                    marginBottom: '12px',
+                    lineHeight: 1.4,
+                  }}>
                     {item.title}
                   </h3>
-                  <p className="text-[#1C277B]/55 font-normal leading-relaxed text-sm group-hover:text-white/55 transition-colors">
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '15px',
+                    color: 'rgba(255,255,255,0.65)',
+                    lineHeight: 1.7,
+                  }}>
                     {item.desc}
                   </p>
-                </motion.div>
+                </div>
               </FadeIn>
             ))}
           </div>
+
+          <FadeIn delay={0.3}>
+            <div style={{ marginTop: '56px', paddingTop: '32px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+              <Link to="/pendekatan" className="cta-link" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                Lihat pendekatan kami →
+              </Link>
+            </div>
+          </FadeIn>
         </div>
+
+        <style>{`
+          @media (max-width: 768px) {
+            #problems-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </section>
 
       {/* ════════════════════════════════════════════════════════════════
           SERVICES
       ════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-36 px-6 md:px-10 bg-[#FFFFFC]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white section-pad">
+        <div className="container-bilmare">
           <FadeIn>
-            <div className="mb-14">
-              <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/15 px-4 py-2 rounded-full mb-5">
-                Layanan
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#1C277B] leading-[1.15]">
+            <div className="fade-in-up" style={{ marginBottom: '64px' }}>
+              <div className="overline" style={{ marginBottom: '16px' }}>Layanan</div>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: 'clamp(28px, 4vw, 48px)',
+                color: 'var(--text-dark)',
+                marginBottom: '16px',
+                lineHeight: 1.2,
+              }}>
                 Dua titik masuk.<br />Satu standar verifikasi.
               </h2>
-              <p className="mt-4 text-lg text-[#1C277B]/55 font-normal max-w-lg">
+              <p style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '16px',
+                color: 'var(--text-muted)',
+                maxWidth: '480px',
+                lineHeight: 1.7,
+              }}>
                 Situasi pelaporan Anda — bukan skala perusahaan — yang menentukan jalur yang tepat.
               </p>
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }} id="services-grid">
             {services.map((s, i) => (
               <FadeIn key={i} delay={i * 0.1}>
-                <motion.div
-                  className="bg-[#DFE7F7] rounded-2xl p-8 md:p-10 group hover:bg-[#1C277B] transition-colors duration-500 h-full border border-[#1C277B]/5 flex flex-col"
-                  whileHover={{ y: -6 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <span className="inline-block text-[11px] font-bold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/10 group-hover:text-white/60 group-hover:bg-white/10 px-3 py-1.5 rounded-full mb-6 transition-colors w-fit">
-                    {s.tier}
-                  </span>
-                  <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-[#1C277B] group-hover:text-white mb-3 transition-colors leading-[1.2]">
+                <div className="service-card">
+                  <PlaceholderImage
+                    src={s.photo}
+                    alt={s.photoAlt}
+                    className="photo-card"
+                    style={{ margin: '-40px -40px 32px -40px', width: 'calc(100% + 80px)' }}
+                  />
+                  <div className="overline" style={{ marginBottom: '12px' }}>{s.tag}</div>
+                  <h3 style={{
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '24px',
+                    color: 'var(--text-dark)',
+                    marginBottom: '12px',
+                    lineHeight: 1.3,
+                  }}>
                     {s.title}
                   </h3>
-                  <p className="text-[#1C277B]/55 font-normal text-base leading-relaxed mb-8 group-hover:text-white/55 transition-colors">
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '15px',
+                    color: 'var(--text-muted)',
+                    marginBottom: '24px',
+                    lineHeight: 1.7,
+                  }}>
                     {s.subtitle}
                   </p>
-                  <ul className="space-y-3 mb-8 flex-1">
+                  <ul style={{ listStyle: 'none', marginBottom: '24px' }}>
                     {s.bullets.map((b, j) => (
-                      <li key={j} className="flex items-start gap-3 text-sm text-[#1C277B]/65 group-hover:text-white/65 transition-colors">
-                        <CheckCircle size={15} className="mt-0.5 shrink-0 text-[#234CF9] group-hover:text-[#234CF9]/80 transition-colors" />
-                        <span>{b}</span>
+                      <li key={j} style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '14px',
+                        color: 'var(--text-muted)',
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '10px',
+                        marginBottom: '10px',
+                      }}>
+                        <CheckCircle size={14} style={{ color: 'var(--mckinsey-blue)', marginTop: '2px', flexShrink: 0 }} />
+                        {b}
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    to="/layanan"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#234CF9] group-hover:text-white transition-colors mt-auto hover:opacity-80"
-                  >
-                    Pelajari layanan <ArrowRight size={14} />
-                  </Link>
-                </motion.div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
+                    <span className="duration-badge">{s.duration}</span>
+                    <Link to="/layanan" className="cta-link">
+                      Pelajari layanan →
+                    </Link>
+                  </div>
+                </div>
               </FadeIn>
             ))}
           </div>
 
-          {/* Entry product */}
+          {/* Entry product bar */}
           <FadeIn delay={0.2}>
-            <div className="relative overflow-hidden bg-[#1C277B] rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-              <div
-                className="absolute -right-16 -top-16 w-[350px] h-[350px] rounded-full pointer-events-none"
-                style={{ background: 'radial-gradient(circle, rgba(35,76,249,0.3) 0%, transparent 70%)' }}
-              />
-              <div className="relative">
-                <span className="inline-block text-[11px] font-bold tracking-[0.18em] uppercase text-white/35 mb-3">
-                  Entry Product — 2026
-                </span>
-                <h3 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
+            <div style={{
+              background: 'var(--deep-navy)',
+              padding: '40px 48px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '24px',
+              position: 'relative',
+              overflow: 'hidden',
+            }}>
+              <div className="glow-blob" style={{ top: '-80px', right: '-80px', width: '300px', height: '300px' }} />
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                  <span className="overline-white">Entry Product — 2026</span>
+                  <span className="start-badge">Mulai di sini</span>
+                </div>
+                <h3 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '28px',
+                  color: 'white',
+                  marginBottom: '8px',
+                }}>
                   PSPK Readiness Assessment
                 </h3>
-                <p className="text-white/50 font-normal mt-2 max-w-lg text-base leading-relaxed">
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '15px',
+                  color: 'rgba(255,255,255,0.6)',
+                  maxWidth: '480px',
+                  lineHeight: 1.6,
+                }}>
                   Peta gap kesiapan PSPK 1/2 dalam 2–3 minggu. Tidak perlu komitmen besar. Langkah pertama yang paling rasional.
                 </p>
               </div>
-              <Link
-                to="/layanan"
-                className="relative inline-flex items-center gap-2 bg-white text-[#1C277B] px-7 py-3.5 rounded-full text-sm font-bold hover:bg-[#DFE7F7] transition-colors shrink-0 group"
-              >
-                Mulai dari sini
-                <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              <Link to="/layanan" className="btn-primary" style={{ position: 'relative', zIndex: 1, flexShrink: 0 }}>
+                Mulai dari sini <ArrowRight size={15} />
               </Link>
             </div>
           </FadeIn>
         </div>
+
+        <style>{`
+          @media (max-width: 768px) {
+            #services-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </section>
 
       {/* ════════════════════════════════════════════════════════════════
           METHODOLOGY
       ════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-36 px-6 md:px-10 bg-[#DFE7F7]">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            <FadeIn className="lg:sticky lg:top-32">
-              <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/15 px-4 py-2 rounded-full mb-6">
-                Metodologi
-              </span>
-              <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#1C277B] leading-[1.15] mb-5">
-                The Four Layers.
-              </h2>
-              <p className="text-lg text-[#1C277B]/55 font-normal leading-relaxed mb-8">
-                Integritas pengungkapan dibangun lapis demi lapis — bukan diperiksa sekaligus di akhir.
-              </p>
-              <Link
-                to="/pendekatan"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-[#234CF9] hover:opacity-70 transition-opacity group"
-              >
-                Detail metodologi
-                <ChevronRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-            </FadeIn>
-
-            <div className="space-y-3">
-              {methodology.map((m, i) => (
-                <FadeIn key={i} delay={i * 0.08}>
-                  <motion.div
-                    className="bg-white rounded-xl p-6 flex gap-5 items-start group hover:bg-[#1C277B] transition-colors duration-300 cursor-default border border-[#1C277B]/5"
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <span className="text-[11px] font-bold tracking-widest uppercase text-[#234CF9] group-hover:text-white/40 transition-colors w-8 shrink-0 mt-1">
-                      {m.num}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-bold text-[#1C277B] group-hover:text-white mb-1.5 transition-colors tracking-tight">
-                        {m.name}
-                      </h3>
-                      <p className="text-[#1C277B]/55 group-hover:text-white/55 font-normal leading-relaxed text-sm transition-colors">
-                        {m.desc}
-                      </p>
-                    </div>
-                    <ArrowRight size={15} className="text-[#1C277B]/20 group-hover:text-white/40 transition-all mt-0.5 shrink-0 group-hover:translate-x-0.5" />
-                  </motion.div>
-                </FadeIn>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          CLIENTS
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-36 px-6 md:px-10 bg-[#FFFFFC]">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-dark wave-overlay section-pad">
+        <div className="container-bilmare" style={{ position: 'relative', zIndex: 1 }}>
           <FadeIn>
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-14">
+            <div className="fade-in-up" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px' }}>
               <div>
-                <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/15 px-4 py-2 rounded-full mb-5">
-                  Klien Kami
-                </span>
-                <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#1C277B] max-w-xl leading-[1.15]">
-                  Perusahaan di mana kualitas pengungkapan berdampak langsung pada hasil bisnis.
+                <div className="overline-white" style={{ marginBottom: '16px' }}>Metodologi</div>
+                <h2 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: 'clamp(28px, 4vw, 48px)',
+                  color: 'white',
+                  lineHeight: 1.2,
+                }}>
+                  The Four Layers.
                 </h2>
               </div>
-              <Link
-                to="/klien-kami"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-[#234CF9] hover:opacity-70 transition-opacity shrink-0 group"
-              >
-                Profil klien
-                <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+              <Link to="/pendekatan" className="cta-link" style={{ color: 'rgba(255,255,255,0.7)', flexShrink: 0 }}>
+                Detail metodologi →
               </Link>
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <p className="fade-in-up" style={{
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '18px',
+            color: 'rgba(255,255,255,0.65)',
+            maxWidth: '560px',
+            lineHeight: 1.7,
+            marginBottom: '64px',
+          }}>
+            Integritas pengungkapan dibangun lapis demi lapis — bukan diperiksa sekaligus di akhir.
+          </p>
+
+          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }} id="method-grid">
+            {methodology.map((m, i) => (
+              <FadeIn key={i} delay={i * 0.08}>
+                <div className="layer-step">
+                  <div className="layer-step-number">{m.num}</div>
+                  <h3 style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '17px',
+                    fontWeight: 600,
+                    color: 'white',
+                    marginBottom: '12px',
+                  }}>
+                    {m.name}
+                  </h3>
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '15px',
+                    color: 'rgba(255,255,255,0.65)',
+                    lineHeight: 1.7,
+                  }}>
+                    {m.desc}
+                  </p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+
+        <style>{`
+          @media (max-width: 1024px) {
+            #method-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          }
+          @media (max-width: 640px) {
+            #method-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
+      </section>
+
+      {/* ════════════════════════════════════════════════════════════════
+          WHO WE SERVE (Clients)
+      ════════════════════════════════════════════════════════════════ */}
+      <section className="bg-vivid section-pad">
+        <div className="container-bilmare">
+          <FadeIn>
+            <div className="fade-in-up" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px' }}>
+              <div>
+                <div className="overline-white" style={{ marginBottom: '16px' }}>Klien Kami</div>
+                <h2 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: 'clamp(28px, 4vw, 48px)',
+                  color: 'white',
+                  maxWidth: '600px',
+                  lineHeight: 1.2,
+                }}>
+                  Perusahaan di mana kualitas pengungkapan berdampak langsung pada hasil bisnis.
+                </h2>
+              </div>
+              <Link to="/klien-kami" className="cta-link" style={{ color: 'rgba(255,255,255,0.8)', flexShrink: 0 }}>
+                Profil klien →
+              </Link>
+            </div>
+          </FadeIn>
+
+          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2px' }} id="clients-grid">
             {[
               { title: 'Perusahaan Terbuka', desc: 'Emiten OJK dengan kewajiban pengungkapan berkala. Konsekuensi regulatori atas ketidaksesuaian pelaporan.' },
               { title: 'Calon IPO', desc: 'Laporan publik pertama dalam konteks due diligence investor institusional. Zero margin for error.' },
@@ -486,71 +683,125 @@ export default function Home() {
               { title: 'Bisnis Keluarga', desc: 'Transisi ke standar tata kelola korporasi yang lebih formal. Dokumentasi metodologi dari nol.' },
             ].map((c, i) => (
               <FadeIn key={i} delay={i * 0.08}>
-                <motion.div
-                  className="bg-[#DFE7F7] rounded-2xl p-7 h-full border border-[#1C277B]/5 group hover:bg-[#1C277B] transition-colors duration-300"
-                  whileHover={{ y: -6 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <h3 className="text-lg font-bold text-[#1C277B] group-hover:text-white mb-3 tracking-tight transition-colors">
+                <div className="dark-card">
+                  <h3 style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '17px',
+                    fontWeight: 600,
+                    color: 'white',
+                    marginBottom: '12px',
+                  }}>
                     {c.title}
                   </h3>
-                  <p className="text-[#1C277B]/55 group-hover:text-white/55 font-normal text-sm leading-relaxed transition-colors">
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    color: 'rgba(255,255,255,0.7)',
+                    lineHeight: 1.7,
+                  }}>
                     {c.desc}
                   </p>
-                </motion.div>
+                </div>
               </FadeIn>
             ))}
           </div>
         </div>
+
+        <style>{`
+          @media (max-width: 1024px) {
+            #clients-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          }
+          @media (max-width: 640px) {
+            #clients-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </section>
 
       {/* ════════════════════════════════════════════════════════════════
           CTA
       ════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 md:py-36 px-6 md:px-10 bg-[#1C277B] relative overflow-hidden">
-        <MeshBg dark />
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="bg-hero wave-overlay section-pad">
+        <div className="container-bilmare" style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'center' }} id="cta-grid">
             <FadeIn>
-              <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-white/40 border border-white/15 px-4 py-2 rounded-full mb-6">
-                Diskusikan Kebutuhan Anda
-              </span>
-              <h2 className="text-4xl md:text-5xl lg:text-[56px] font-bold tracking-tight text-white leading-[1.1] mb-6">
+              <div className="overline-white" style={{ marginBottom: '20px' }}>Diskusikan Kebutuhan Anda</div>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: 'clamp(28px, 4vw, 52px)',
+                color: 'white',
+                marginBottom: '20px',
+                lineHeight: 1.15,
+              }}>
                 Kepercayaan masa depan dimulai dari pertanggungjawaban hari ini.
               </h2>
-              <p className="text-lg text-white/50 font-normal leading-relaxed">
+              <p style={{
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '18px',
+                color: 'rgba(255,255,255,0.65)',
+                lineHeight: 1.7,
+              }}>
                 Hubungi tim Bilmare untuk asesmen awal. Tidak ada komitmen di tahap ini — hanya pemetaan kondisi laporan Anda saat ini.
               </p>
             </FadeIn>
 
             <FadeIn delay={0.15}>
-              <div className="bg-white/5 border border-white/12 rounded-2xl p-8 md:p-10 backdrop-blur-sm">
-                <h3 className="text-xl font-bold text-white mb-7 tracking-tight">Mulai percakapan</h3>
-                <div className="space-y-5 mb-8">
+              <div className="white-card">
+                <h3 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '22px',
+                  color: 'var(--text-dark)',
+                  marginBottom: '28px',
+                }}>
+                  Mulai percakapan
+                </h3>
+                <div style={{ marginBottom: '32px' }}>
                   {[
                     'Penilaian gap kesiapan PSPK 1/2',
                     'Review kondisi laporan yang sedang berjalan',
                     'Konsultasi scope untuk engagement baru',
                   ].map((item, i) => (
-                    <div key={i} className="flex items-start gap-4">
-                      <div className="w-5 h-5 rounded-full border border-[#234CF9]/50 bg-[#234CF9]/15 flex items-center justify-center shrink-0 mt-0.5">
-                        <CheckCircle size={11} className="text-[#234CF9]" />
+                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '16px' }}>
+                      <div style={{
+                        width: '20px',
+                        height: '20px',
+                        border: '1px solid var(--mckinsey-blue)',
+                        background: 'rgba(34,81,255,0.08)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        marginTop: '2px',
+                      }}>
+                        <CheckCircle size={11} style={{ color: 'var(--mckinsey-blue)' }} />
                       </div>
-                      <span className="text-white/60 font-normal text-base">{item}</span>
+                      <span style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '15px',
+                        color: 'var(--text-muted)',
+                        lineHeight: 1.6,
+                      }}>
+                        {item}
+                      </span>
                     </div>
                   ))}
                 </div>
                 <Link
                   to="/layanan"
-                  className="w-full inline-flex items-center justify-center gap-3 bg-[#234CF9] text-white px-8 py-4 rounded-full text-sm font-bold hover:bg-[#1a3de8] transition-colors group shadow-lg shadow-[#234CF9]/30"
+                  className="btn-primary"
+                  style={{ width: '100%', justifyContent: 'center', padding: '16px 28px' }}
                 >
                   Hubungi Kami
-                  <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </Link>
               </div>
             </FadeIn>
           </div>
         </div>
+
+        <style>{`
+          @media (max-width: 1024px) {
+            #cta-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          }
+        `}</style>
       </section>
 
     </div>

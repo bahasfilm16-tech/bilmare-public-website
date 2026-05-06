@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { FadeIn } from '../Layout';
 import { motion, AnimatePresence } from 'motion/react';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const clients = [
   {
@@ -11,7 +12,6 @@ const clients = [
     desc: 'Emiten yang menghadapi kewajiban pengungkapan berkala kepada OJK dan pasar modal, dengan konsekuensi regulatori atas ketidaksesuaian pelaporan.',
     exposure: 'Ketidaksesuaian angka antara Laporan Tahunan dan Laporan Keuangan Audited. Perubahan metodologi metrik ESG antar periode yang tidak diungkapkan.',
     needs: ['Verifikasi silang lintas dokumen', 'Konsistensi time-series metrik', 'Disclosure Risk Register', 'Pre-assurance readiness'],
-    color: '#234CF9',
   },
   {
     title: 'Calon IPO',
@@ -19,7 +19,6 @@ const clients = [
     desc: 'Perusahaan yang mempersiapkan penawaran umum perdana dan untuk pertama kali menyusun laporan publik dalam konteks due diligence investor institusional.',
     exposure: 'Laporan publik pertama yang disusun tanpa verifikasi silang terstruktur. Klaim pencapaian operasional yang tidak dapat ditelusuri ke dokumen sumber.',
     needs: ['Pembangunan audit trail dari nol', 'Dokumentasi metodologi data', 'Cross-Reference Matrix lengkap', 'IR FAQ Databook'],
-    color: '#1C277B',
   },
   {
     title: 'Entitas Diregulasi',
@@ -27,7 +26,6 @@ const clients = [
     desc: 'Perbankan, asuransi, dan utilitas yang menghadapi persyaratan transparansi ESG yang meningkat dari regulator sektor dan lembaga rating.',
     exposure: 'Data emisi dan konsumsi energi yang dilaporkan dengan metodologi berbeda antar periode. Ketidaksesuaian metrik ESG dengan laporan regulator sektor.',
     needs: ['Konsistensi metodologi GHG', 'Alignment regulasi multi-sektor', 'Verifikasi data kuantitatif', 'Dokumentasi asumsi'],
-    color: '#234CF9',
   },
   {
     title: 'Bisnis Keluarga',
@@ -35,65 +33,85 @@ const clients = [
     desc: 'Perusahaan yang bertransisi dari struktur tata kelola keluarga ke standar tata kelola korporasi yang lebih formal.',
     exposure: 'Tidak adanya dokumentasi metodologi untuk data yang dilaporkan. Data historis tanpa definisi yang konsisten.',
     needs: ['Pembangunan sistem dokumentasi', 'Definisi metrik yang konsisten', 'Full report development', 'Pelatihan tim internal'],
-    color: '#1C277B',
   },
 ];
 
 export default function KlienKami() {
+  useScrollReveal();
   const [active, setActive] = useState(0);
   const activeClient = clients[active];
 
   return (
-    <div className="bg-[#FFFFFC] text-[#1C277B] min-h-screen">
+    <div style={{ background: 'white', color: 'var(--text-dark)', minHeight: '100vh' }}>
 
-      {/* ── HEADER ────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-32 pb-20 px-6 md:px-10 bg-[#FFFFFC]">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="mesh-1 absolute -top-40 -left-32 w-[600px] h-[600px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(35,76,249,0.1) 0%, transparent 70%)' }} />
-          <div className="mesh-3 absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(223,231,247,0.9) 0%, transparent 70%)' }} />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto">
+      {/* ── HERO ────────────────────────────────────────────────────── */}
+      <section className="bg-dark section-pad" style={{ paddingTop: '140px' }}>
+        <div className="container-bilmare">
           <FadeIn>
-            <span className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 border border-[#234CF9]/15 px-4 py-2 rounded-full mb-6">
-              Klien Kami
-            </span>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] text-[#1C277B] mb-6 max-w-4xl">
+            <div className="overline-white fade-in-up" style={{ marginBottom: '20px' }}>Klien Kami</div>
+            <h1 style={{
+              fontFamily: 'Georgia, serif',
+              fontSize: 'clamp(36px, 6vw, 72px)',
+              color: 'white',
+              maxWidth: '800px',
+              lineHeight: 1.1,
+              marginBottom: '24px',
+            }}>
               Bukan berdasarkan sektor.<br />Berdasarkan kebutuhan.
             </h1>
-            <p className="text-xl text-[#1C277B]/55 font-normal max-w-2xl leading-relaxed">
+            <p style={{
+              fontFamily: 'Inter, sans-serif',
+              fontSize: '18px',
+              color: 'rgba(255,255,255,0.7)',
+              maxWidth: '600px',
+              lineHeight: 1.7,
+            }}>
               Bilmare bekerja dengan perusahaan di mana kualitas pengungkapan berdampak langsung pada hasil bisnis — berdasarkan tahap dan struktur tata kelola, bukan industri.
             </p>
           </FadeIn>
         </div>
       </section>
 
-      {/* ── INTERACTIVE CLIENT GRID ───────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 bg-[#DFE7F7]">
-        <div className="max-w-7xl mx-auto">
+      {/* ── INTERACTIVE CLIENT GRID ─────────────────────────────────── */}
+      <section className="bg-light section-pad">
+        <div className="container-bilmare">
           <FadeIn>
-            <div className="flex flex-col lg:flex-row gap-5">
+            <div style={{ display: 'flex', gap: '24px' }} className="client-stepper">
               {/* Tabs */}
-              <div className="lg:w-2/5 grid grid-cols-2 lg:grid-cols-1 gap-3">
+              <div style={{ width: '35%', display: 'flex', flexDirection: 'column', gap: '2px' }} className="client-tabs">
                 {clients.map((c, i) => (
                   <button
                     key={i}
                     onClick={() => setActive(i)}
-                    className={`text-left p-5 rounded-2xl border transition-all duration-300 ${
-                      active === i
-                        ? 'bg-[#1C277B] border-[#1C277B] shadow-lg shadow-[#1C277B]/15'
-                        : 'bg-white border-[#1C277B]/8 hover:bg-white hover:border-[#1C277B]/15'
-                    }`}
+                    style={{
+                      textAlign: 'left',
+                      padding: '20px 24px',
+                      border: 'none',
+                      background: active === i ? 'var(--deep-navy)' : 'white',
+                      cursor: 'pointer',
+                      transition: 'all 0.25s',
+                      borderLeft: `3px solid ${active === i ? 'var(--mckinsey-blue)' : 'transparent'}`,
+                    }}
                   >
-                    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase block mb-1.5 ${
-                      active === i ? 'text-white/40' : 'text-[#234CF9]'
-                    }`}>
+                    <span style={{
+                      display: 'block',
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '10px',
+                      fontWeight: 700,
+                      letterSpacing: '0.2em',
+                      textTransform: 'uppercase',
+                      color: active === i ? 'rgba(255,255,255,0.45)' : 'var(--mckinsey-blue)',
+                      marginBottom: '6px',
+                    }}>
                       {c.tag}
                     </span>
-                    <h3 className={`text-base font-bold tracking-tight transition-colors ${
-                      active === i ? 'text-white' : 'text-[#1C277B]'
-                    }`}>
+                    <h3 style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '15px',
+                      fontWeight: 600,
+                      color: active === i ? 'white' : 'var(--text-dark)',
+                      transition: 'color 0.2s',
+                    }}>
                       {c.title}
                     </h3>
                   </button>
@@ -101,7 +119,7 @@ export default function KlienKami() {
               </div>
 
               {/* Detail panel */}
-              <div className="lg:w-3/5">
+              <div style={{ flex: 1 }}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={active}
@@ -109,45 +127,99 @@ export default function KlienKami() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -14 }}
                     transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                    className="bg-white rounded-2xl p-8 md:p-10 border border-[#1C277B]/8 h-full relative overflow-hidden"
+                    style={{
+                      background: 'white',
+                      border: '1px solid var(--line)',
+                      borderTop: '3px solid var(--mckinsey-blue)',
+                      padding: '40px 48px',
+                      height: '100%',
+                    }}
                   >
-                    <div
-                      className="absolute -right-10 -top-10 w-[200px] h-[200px] rounded-full pointer-events-none"
-                      style={{ background: `radial-gradient(circle, ${activeClient.color}10 0%, transparent 70%)` }}
-                    />
-                    <div className="relative z-10">
-                      <span className="inline-block text-[11px] font-bold tracking-[0.18em] uppercase text-[#234CF9] bg-[#234CF9]/8 px-3 py-1.5 rounded-full mb-5">
-                        {activeClient.tag}
-                      </span>
-                      <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#1C277B] mb-4 leading-[1.15]">
-                        {activeClient.title}
-                      </h2>
-                      <p className="text-base text-[#1C277B]/60 font-normal leading-relaxed mb-8">
-                        {activeClient.desc}
-                      </p>
+                    <span style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      letterSpacing: '0.15em',
+                      textTransform: 'uppercase',
+                      color: 'var(--mckinsey-blue)',
+                      display: 'block',
+                      marginBottom: '16px',
+                    }}>
+                      {activeClient.tag}
+                    </span>
+                    <h2 style={{
+                      fontFamily: 'Georgia, serif',
+                      fontSize: 'clamp(24px, 3vw, 36px)',
+                      color: 'var(--text-dark)',
+                      marginBottom: '16px',
+                      lineHeight: 1.2,
+                    }}>
+                      {activeClient.title}
+                    </h2>
+                    <p style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '15px',
+                      color: 'var(--text-muted)',
+                      lineHeight: 1.7,
+                      marginBottom: '32px',
+                    }}>
+                      {activeClient.desc}
+                    </p>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#1C277B]/35 mb-4">
-                            Eksposur Pelaporan
-                          </h4>
-                          <p className="text-sm text-[#1C277B]/60 leading-relaxed font-normal">
-                            {activeClient.exposure}
-                          </p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }} className="client-detail-cols">
+                      <div>
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: '10px',
+                          fontWeight: 600,
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'var(--text-muted)',
+                          marginBottom: '12px',
+                        }}>
+                          Eksposur Pelaporan
                         </div>
-                        <div>
-                          <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#1C277B]/35 mb-4">
-                            Kebutuhan Utama
-                          </h4>
-                          <ul className="space-y-2.5">
-                            {activeClient.needs.map((n) => (
-                              <li key={n} className="flex items-start gap-2.5 text-sm text-[#1C277B]/65">
-                                <span className="w-1 h-1 rounded-full bg-[#234CF9] shrink-0 mt-2" />
-                                {n}
-                              </li>
-                            ))}
-                          </ul>
+                        <p style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: '14px',
+                          color: 'var(--text-muted)',
+                          lineHeight: 1.7,
+                        }}>
+                          {activeClient.exposure}
+                        </p>
+                      </div>
+                      <div>
+                        <div style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontSize: '10px',
+                          fontWeight: 600,
+                          letterSpacing: '0.2em',
+                          textTransform: 'uppercase',
+                          color: 'var(--text-muted)',
+                          marginBottom: '12px',
+                        }}>
+                          Kebutuhan Utama
                         </div>
+                        <ul style={{ listStyle: 'none' }}>
+                          {activeClient.needs.map((n) => (
+                            <li key={n} style={{
+                              display: 'flex',
+                              alignItems: 'flex-start',
+                              gap: '10px',
+                              marginBottom: '10px',
+                              fontFamily: 'Inter, sans-serif',
+                              fontSize: '14px',
+                              color: 'var(--text-muted)',
+                            }}>
+                              <span style={{
+                                width: '4px', height: '4px', borderRadius: '50%',
+                                background: 'var(--mckinsey-blue)',
+                                flexShrink: 0, marginTop: '8px',
+                              }} />
+                              {n}
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
                   </motion.div>
@@ -156,39 +228,102 @@ export default function KlienKami() {
             </div>
           </FadeIn>
         </div>
+
+        <style>{`
+          @media (max-width: 1024px) {
+            .client-stepper { flex-direction: column !important; }
+            .client-tabs { width: 100% !important; flex-direction: row !important; flex-wrap: wrap !important; gap: 2px !important; }
+            .client-tabs button { flex: 1 1 calc(50% - 1px) !important; }
+            .client-detail-cols { grid-template-columns: 1fr !important; }
+          }
+          @media (max-width: 640px) {
+            .client-tabs button { flex: 1 1 100% !important; }
+          }
+        `}</style>
       </section>
 
-      {/* ── ALL CLIENTS GRID ──────────────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 bg-[#FFFFFC]">
-        <div className="max-w-7xl mx-auto">
+      {/* ── ALL CLIENTS GRID ─────────────────────────────────────────── */}
+      <section className="bg-white section-pad">
+        <div className="container-bilmare">
           <FadeIn>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-[#1C277B] mb-14 leading-[1.15]">
-              Seluruh profil klien.
-            </h2>
+            <div className="fade-in-up" style={{ marginBottom: '56px' }}>
+              <div className="overline" style={{ marginBottom: '16px' }}>Semua Profil</div>
+              <h2 style={{
+                fontFamily: 'Georgia, serif',
+                fontSize: 'clamp(28px, 4vw, 44px)',
+                color: 'var(--text-dark)',
+                lineHeight: 1.2,
+              }}>
+                Seluruh profil klien.
+              </h2>
+            </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px' }} id="all-clients-grid">
             {clients.map((c, i) => (
               <FadeIn key={i} delay={i * 0.08}>
                 <motion.div
-                  className="bg-[#DFE7F7] rounded-2xl p-8 group hover:bg-[#1C277B] transition-colors duration-400 border border-[#1C277B]/5 h-full flex flex-col"
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.25 }}
+                  style={{
+                    background: 'var(--off-white)',
+                    padding: '40px',
+                    borderTop: '3px solid transparent',
+                    transition: 'all 0.3s',
+                    cursor: 'default',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                  whileHover={{ borderTopColor: 'var(--mckinsey-blue)', background: 'var(--deep-navy)' } as any}
+                  transition={{ duration: 0.3 }}
                 >
-                  <span className="inline-block text-[10px] font-bold tracking-[0.18em] uppercase text-[#234CF9] group-hover:text-white/40 transition-colors mb-5">
+                  <span style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '10px',
+                    fontWeight: 700,
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                    color: 'var(--mckinsey-blue)',
+                    display: 'block',
+                    marginBottom: '20px',
+                  }}>
                     {c.tag}
                   </span>
-                  <h3 className="text-2xl font-bold text-[#1C277B] group-hover:text-white mb-4 tracking-tight transition-colors leading-[1.2]">
+                  <h3 style={{
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '24px',
+                    color: 'var(--text-dark)',
+                    marginBottom: '16px',
+                    lineHeight: 1.2,
+                  }}>
                     {c.title}
                   </h3>
-                  <p className="text-sm text-[#1C277B]/55 group-hover:text-white/55 font-normal leading-relaxed mb-6 transition-colors flex-1">
+                  <p style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    color: 'var(--text-muted)',
+                    lineHeight: 1.7,
+                    marginBottom: '24px',
+                    flex: 1,
+                  }}>
                     {c.desc}
                   </p>
-                  <div className="border-t border-[#1C277B]/8 group-hover:border-white/10 pt-6 transition-colors">
-                    <h4 className="text-[10px] font-bold tracking-[0.18em] uppercase text-[#1C277B]/35 group-hover:text-white/30 mb-3 transition-colors">
+                  <div style={{ borderTop: '1px solid var(--line)', paddingTop: '24px' }}>
+                    <div style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      color: 'var(--text-muted)',
+                      marginBottom: '10px',
+                    }}>
                       Eksposur Pelaporan
-                    </h4>
-                    <p className="text-sm text-[#1C277B]/50 group-hover:text-white/50 font-normal leading-relaxed transition-colors">
+                    </div>
+                    <p style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: '13px',
+                      color: 'var(--text-muted)',
+                      lineHeight: 1.6,
+                    }}>
                       {c.exposure}
                     </p>
                   </div>
@@ -197,37 +332,51 @@ export default function KlienKami() {
             ))}
           </div>
         </div>
+
+        <style>{`
+          @media (max-width: 768px) {
+            #all-clients-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </section>
 
-      {/* ── CTA ───────────────────────────────────────────────────── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 bg-[#1C277B] relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="mesh-1 absolute -top-20 right-0 w-[500px] h-[500px] rounded-full"
-            style={{ background: 'radial-gradient(circle, rgba(35,76,249,0.35) 0%, transparent 70%)' }} />
-        </div>
-        <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-10">
-          <div>
-            <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight mb-4 leading-[1.1]">
-              Kenali posisi laporan Anda.
-            </h2>
-            <p className="text-lg text-white/50 font-normal max-w-xl leading-relaxed">
-              Mulai dengan percakapan awal. Tidak ada komitmen, hanya pemetaan kondisi laporan Anda saat ini.
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3 shrink-0">
-            <Link
-              to="/layanan"
-              className="inline-flex items-center gap-2 bg-white text-[#1C277B] px-7 py-3.5 rounded-full text-sm font-bold hover:bg-[#DFE7F7] transition-colors group"
-            >
-              Lihat Layanan
-              <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-            <Link
-              to="/pendekatan"
-              className="inline-flex items-center gap-2 border border-white/20 text-white/70 px-7 py-3.5 rounded-full text-sm font-semibold hover:border-white/40 hover:text-white transition-colors"
-            >
-              Metodologi Kami
-            </Link>
+      {/* ── CTA ────────────────────────────────────────────────────── */}
+      <section className="bg-dark wave-overlay section-pad">
+        <div className="container-bilmare" style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '40px' }}>
+            <FadeIn>
+              <div>
+                <div className="overline-white" style={{ marginBottom: '16px' }}>Mulai sekarang</div>
+                <h2 style={{
+                  fontFamily: 'Georgia, serif',
+                  fontSize: 'clamp(24px, 4vw, 44px)',
+                  color: 'white',
+                  marginBottom: '16px',
+                  lineHeight: 1.15,
+                }}>
+                  Kenali posisi laporan Anda.
+                </h2>
+                <p style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontSize: '17px',
+                  color: 'rgba(255,255,255,0.6)',
+                  maxWidth: '480px',
+                  lineHeight: 1.7,
+                }}>
+                  Mulai dengan percakapan awal. Tidak ada komitmen, hanya pemetaan kondisi laporan Anda saat ini.
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.15}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', flexShrink: 0 }}>
+                <Link to="/layanan" className="btn-primary">
+                  Lihat Layanan <ArrowRight size={15} />
+                </Link>
+                <Link to="/pendekatan" className="btn-secondary">
+                  Metodologi Kami
+                </Link>
+              </div>
+            </FadeIn>
           </div>
         </div>
       </section>
