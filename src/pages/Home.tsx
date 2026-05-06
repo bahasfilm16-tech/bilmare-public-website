@@ -1,809 +1,426 @@
-import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle } from 'lucide-react';
-import { FadeIn } from '../Layout';
-import { motion } from 'motion/react';
-import { useScrollReveal } from '../hooks/useScrollReveal';
-import { PlaceholderImage } from '../components/PlaceholderImage';
+import FadeIn from '../components/FadeIn';
+import ContactForm from '../components/ContactForm';
 
-// ─── Stat Counter ─────────────────────────────────────────────────────────────
-function StatCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true;
-          const steps = 60;
-          const increment = value / steps;
-          let current = 0;
-          const timer = setInterval(() => {
-            current += increment;
-            if (current >= value) { setCount(value); clearInterval(timer); }
-            else setCount(Math.floor(current));
-          }, 1800 / steps);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [value]);
-
-  return <span ref={ref}>{count}{suffix}</span>;
-}
-
-// ─── Ticker ───────────────────────────────────────────────────────────────────
-function Ticker({ items }: { items: string[] }) {
-  const doubled = [...items, ...items];
-  return (
-    <div className="ticker-bar">
-      <div className="flex gap-10 whitespace-nowrap animate-marquee w-max">
-        {doubled.map((item, i) => (
-          <span key={i} style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '11px',
-            fontWeight: 600,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: 'var(--text-muted)',
-            flexShrink: 0,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '40px',
-          }}>
-            {item}
-            <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--mckinsey-blue)', display: 'inline-block', opacity: 0.5 }} />
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── Home ─────────────────────────────────────────────────────────────────────
 export default function Home() {
-  useScrollReveal();
-
-  const standards = [
-    'GRI Standards 2021', 'IFRS S1 & S2', 'POJK Keuangan Berkelanjutan',
-    'SEOJK 16/2021', 'PSAK Keberlanjutan', 'TCFD Recommendations',
-  ];
-
-  const problems = [
-    {
-      num: '01',
-      title: 'Ketidaksesuaian teridentifikasi menjelang deadline',
-      desc: 'Angka di draft tidak cocok dengan laporan keuangan audited. Waktu untuk perbaikan hampir habis.',
-    },
-    {
-      num: '02',
-      title: 'Scope assurance meluas karena data tidak siap',
-      desc: 'Assurance provider menemukan inkonsistensi data saat fieldwork. Biaya bertambah, jadwal mundur.',
-    },
-    {
-      num: '03',
-      title: 'Pertanyaan regulator tidak bisa dijawab segera',
-      desc: 'Tim IR harus menelusuri data dari berbagai dokumen selama berhari-hari — bukan menjawab dalam hitungan menit.',
-    },
-  ];
-
-  const methodology = [
-    { num: '01', name: 'Data Integrity', desc: 'Cross-check seluruh angka lintas Annual Report, Sustainability Report, dan Laporan Keuangan Audited.' },
-    { num: '02', name: 'Regulatory Alignment', desc: 'Setiap pengungkapan diperiksa terhadap PSPK 1/2, GRI Standards 2021, dan SEOJK 16/2021.' },
-    { num: '03', name: 'Assurance Readiness', desc: 'Laporan disiapkan seolah assurance provider datang besok. Setiap klaim memiliki jejak sumber.' },
-    { num: '04', name: 'Institutional Memory', desc: 'Seluruh verifikasi disimpan terstruktur per klien. Laporan tahun depan tidak mulai dari nol.' },
-  ];
-
-  const services = [
-    {
-      tag: 'TIER 1',
-      title: 'Verification & Disclosure Readiness',
-      subtitle: 'Draft laporan sudah ada. Diperlukan lapisan verifikasi independen sebelum publikasi atau proses assurance.',
-      bullets: [
-        'Verifikasi silang lintas dokumen (AR / SR / LK)',
-        'Konsistensi definisi metrik year-on-year',
-        'Disclosure Risk & Gap Register',
-        'IR FAQ Databook bersumber',
-      ],
-      duration: '4–8 minggu',
-      photo: '/images/service-tier1.jpg',
-      photoAlt: 'Verification & Disclosure Readiness',
-    },
-    {
-      tag: 'TIER 2',
-      title: 'Full Accountable Report Development',
-      subtitle: 'Draft belum ada. Laporan disusun dari awal dengan verifikasi data yang berjalan bersamaan dengan penulisan.',
-      bullets: [
-        'Inventarisasi dan katalogisasi dokumen sumber',
-        'Pembangunan Master Cross-Reference Matrix',
-        'Penyusunan draft dengan dokumentasi bersamaan',
-        'QC gate berlapis sebelum serah terima',
-      ],
-      duration: '10–16 minggu',
-      photo: '/images/service-tier2.jpg',
-      photoAlt: 'Full Accountable Report Development',
-    },
-  ];
-
-  const stats = [
-    { value: 956, suffix: '',     label: 'Emiten BEI (Apr 2026)' },
-    { value: 6,   suffix: '%',    label: 'Sudah di-assure' },
-    { value: 9,   suffix: ' bln', label: 'Sebelum PSPK efektif' },
-    { value: 850, suffix: '+',    label: 'Emiten belum siap' },
-  ];
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', background: 'white', color: 'var(--text-dark)' }}>
-
-      {/* ════════════════════════════════════════════════════════════════
-          HERO
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="bg-hero wave-overlay photo-section-bg" style={{ minHeight: '100vh', position: 'relative', overflow: 'hidden' }}>
-        <img
-          src="/images/hero-bg.jpg"
-          alt="Bilmare team"
-          className="photo-bg-img"
-          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+    <div className="w-full">
+      {/* SECTION 1 — HERO */}
+      <section className="relative min-h-screen flex items-center bg-hero-gradient overflow-hidden pt-[72px]">
+        <div
+          className="absolute inset-0 opacity-[0.05] pointer-events-none"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(-45deg, transparent, transparent 10px, #ffffff 10px, #ffffff 11px)',
+          }}
         />
-        <div className="photo-bg-overlay" />
-        <div className="glow-blob" style={{ top: '-100px', right: '-100px' }} />
+        <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-mckinsey-blue opacity-[0.15] blur-[100px] pointer-events-none" />
 
-        <div className="photo-section-content container-bilmare" style={{
-          paddingTop: '140px',
-          paddingBottom: '100px',
-          minHeight: '100vh',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}>
-          {/* Overline badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            style={{ marginBottom: '24px' }}
-          >
-            <span className="overline-white">
-              PSPK 1/PSPK 2 — Berlaku 1 Januari 2027
-            </span>
-          </motion.div>
-
-          {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              fontFamily: 'Georgia, "Times New Roman", serif',
-              fontSize: 'clamp(40px, 6vw, 80px)',
-              fontWeight: 700,
-              color: 'white',
-              maxWidth: '760px',
-              marginBottom: '24px',
-              lineHeight: 1.1,
-            }}
-          >
-            Laporan yang siap dipertanyakan — sebelum pertanyaan datang.
-          </motion.h1>
-
-          {/* Subheadline */}
-          <motion.p
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '18px',
-              color: 'rgba(255,255,255,0.75)',
-              maxWidth: '620px',
-              lineHeight: 1.7,
-              marginBottom: '48px',
-            }}
-          >
-            Kami memverifikasi setiap klaim dalam laporan keberlanjutan Anda — memastikan keterlacakan,
-            konsistensi, dan dokumentasi yang memadai sebelum auditor, regulator, atau investor mempertanyakannya.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}
-          >
-            <Link to="/layanan" className="btn-primary">
-              Lihat Layanan <ArrowRight size={15} />
-            </Link>
-            <Link to="/pendekatan" className="btn-secondary">
-              Metodologi Kami
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          TICKER
-      ════════════════════════════════════════════════════════════════ */}
-      <Ticker items={standards} />
-
-      {/* ════════════════════════════════════════════════════════════════
-          STATS / URGENCY
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="bg-light section-pad">
-        <div className="container-bilmare">
-          <FadeIn>
-            <div className="fade-in-up" style={{ marginBottom: '64px' }}>
-              <div className="overline" style={{ marginBottom: '16px' }}>Konteks Regulasi</div>
-              <h2 style={{
-                fontFamily: 'Georgia, serif',
-                fontSize: 'clamp(28px, 4vw, 48px)',
-                color: 'var(--text-dark)',
-                maxWidth: '680px',
-                lineHeight: 1.2,
-              }}>
-                Pasar yang belum siap. Tenggat yang tidak bergeser.
-              </h2>
-            </div>
-          </FadeIn>
-
-          {/* Stat grid */}
-          <div className="fade-in-up" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '40px',
-            marginBottom: '64px',
-          }}>
-            {stats.map((s, i) => (
-              <FadeIn key={i} delay={i * 0.08}>
-                <div>
-                  <div className="stat-number">
-                    <StatCounter value={s.value} suffix={s.suffix} />
-                  </div>
-                  <p style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '13px',
-                    color: 'var(--text-muted)',
-                    marginTop: '12px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                    fontWeight: 500,
-                  }}>
-                    {s.label}
-                  </p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-
-          {/* 2-col explanation */}
-          <FadeIn>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px' }} className="stats-cols">
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', color: 'var(--text-muted)', lineHeight: 1.8, maxWidth: '520px' }}>
-                PSPK 1 dan PSPK 2 — Pedoman Standar Pengungkapan Keberlanjutan — adalah perubahan terbesar
-                dalam pelaporan emiten Indonesia sejak SEOJK 16/2021. Berlaku efektif 1 Januari 2027, dengan
-                implementasi bertahap yang dimulai jauh sebelum tenggat resmi.
-              </p>
-              <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '16px', color: 'var(--text-muted)', lineHeight: 1.8, maxWidth: '520px' }}>
-                Mayoritas emiten belum memiliki sistem verifikasi data dan dokumentasi metodologi yang memadai.
-                Bilmare hadir spesifik untuk mengisi celah ini — sebelum assurance provider menemukan temuan,
-                sebelum OJK mempertanyakan laporan yang sudah terbit.
-              </p>
-            </div>
-          </FadeIn>
-        </div>
-
-        <style>{`
-          @media (max-width: 768px) {
-            .stats-cols { grid-template-columns: 1fr !important; }
-          }
-          @media (max-width: 640px) {
-            .fade-in-up[style*="grid-template-columns: repeat(4"] {
-              grid-template-columns: repeat(2, 1fr) !important;
-            }
-          }
-        `}</style>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          EDITORIAL PHOTO STRIP
-      ════════════════════════════════════════════════════════════════ */}
-      <section style={{ background: '#030f1a', padding: '0' }}>
-        <div className="container-bilmare">
-          <PlaceholderImage
-            src="/images/client-context.jpg"
-            alt="Konteks pasar Indonesia"
-            className="photo-wide"
-            overlayLabel="Konteks Regulasi"
-            overlayTitle="PSPK 1/PSPK 2 — Perubahan terbesar dalam pelaporan emiten Indonesia sejak SEOJK 16/2021."
-          />
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          WHY BILMARE (Positioning)
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="bg-white" style={{ padding: '0' }}>
-        <div className="split-section">
-          <div className="split-text">
+        <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 relative z-10 w-full flex flex-col md:flex-row items-center justify-between gap-12 py-16 md:py-24">
+          <div className="w-full md:w-[60%] lg:w-[55%]">
             <FadeIn>
-              <div className="overline" style={{ marginBottom: '20px' }}>Tentang Bilmare</div>
-              <h2 style={{
-                fontFamily: 'Georgia, serif',
-                fontSize: 'clamp(28px, 3.5vw, 48px)',
-                color: 'var(--text-dark)',
-                marginBottom: '24px',
-                lineHeight: 1.2,
-              }}>
-                Satu-satunya firma di Indonesia yang mengkhususkan diri mempersiapkan laporan emiten menghadapi PSPK 1/PSPK 2.
-              </h2>
-              <p style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                color: 'var(--text-muted)',
-                lineHeight: 1.8,
-                marginBottom: '32px',
-              }}>
-                Bukan assurance provider. Bukan agency desain laporan. Bilmare mengisi satu celah yang
-                spesifik: memastikan setiap klaim dalam laporan Anda memiliki keterlacakan dan konsistensi
-                yang memadai — sebelum laporan naik ke publik.
+              <div className="text-mckinsey-blue font-sans text-xs tracking-[0.15em] uppercase font-semibold mb-5">
+                PSPK 1 / PSPK 2 — WAJIB 1 JANUARI 2027
+              </div>
+              <h1 className="font-georgia text-white text-[clamp(36px,6vw,84px)] leading-[1.1] font-bold mb-7">
+                Setiap klaim dalam laporan Anda — dapat dipertanggungjawabkan.
+              </h1>
+              <p className="font-sans text-white/80 text-base md:text-xl leading-relaxed mb-9 max-w-2xl">
+                Bilmare adalah satu-satunya firma di Indonesia yang mengkhususkan diri mempersiapkan
+                laporan emiten menghadapi kewajiban PSPK 1/PSPK 2 per Januari 2027 — dengan
+                metodologi verifikasi yang memastikan setiap klaim dapat dipertanggungjawabkan di
+                hadapan regulator, investor, dan assurance provider.
               </p>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                {['Verification-led', 'Bukan assurance provider', 'Bukan agency kreatif'].map((tag) => (
-                  <span key={tag} style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    color: 'var(--text-muted)',
-                    border: '1px solid var(--line)',
-                    padding: '6px 14px',
-                  }}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </FadeIn>
-          </div>
-          <PlaceholderImage
-            src="/images/about-team.jpg"
-            alt="Tim Bilmare"
-            className="split-photo"
-          />
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          PROBLEMS (Why Bilmare / Differentiators)
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="bg-dark wave-overlay section-pad">
-        <div className="container-bilmare" style={{ position: 'relative', zIndex: 1 }}>
-          <FadeIn>
-            <div className="fade-in-up" style={{ marginBottom: '64px' }}>
-              <div className="overline-white" style={{ marginBottom: '16px' }}>Situasi yang Kami Selesaikan</div>
-              <h2 style={{
-                fontFamily: 'Georgia, serif',
-                fontSize: 'clamp(28px, 4vw, 48px)',
-                color: 'white',
-                maxWidth: '640px',
-                lineHeight: 1.2,
-              }}>
-                Tiga kondisi yang berulang setiap siklus pelaporan.
-              </h2>
-            </div>
-          </FadeIn>
-
-          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0' }} id="problems-grid">
-            {problems.map((item, i) => (
-              <FadeIn key={i} delay={i * 0.1}>
-                <div className="layer-step">
-                  <div className="layer-step-number">{item.num}</div>
-                  <h3 style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '18px',
-                    fontWeight: 600,
-                    color: 'white',
-                    marginBottom: '12px',
-                    lineHeight: 1.4,
-                  }}>
-                    {item.title}
-                  </h3>
-                  <p style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '15px',
-                    color: 'rgba(255,255,255,0.65)',
-                    lineHeight: 1.7,
-                  }}>
-                    {item.desc}
-                  </p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-
-          <FadeIn delay={0.3}>
-            <div style={{ marginTop: '56px', paddingTop: '32px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-              <Link to="/pendekatan" className="cta-link" style={{ color: 'rgba(255,255,255,0.7)' }}>
-                Lihat pendekatan kami →
-              </Link>
-            </div>
-          </FadeIn>
-        </div>
-
-        <style>{`
-          @media (max-width: 768px) {
-            #problems-grid { grid-template-columns: 1fr !important; }
-          }
-        `}</style>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          SERVICES
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="bg-white section-pad">
-        <div className="container-bilmare">
-          <FadeIn>
-            <div className="fade-in-up" style={{ marginBottom: '64px' }}>
-              <div className="overline" style={{ marginBottom: '16px' }}>Layanan</div>
-              <h2 style={{
-                fontFamily: 'Georgia, serif',
-                fontSize: 'clamp(28px, 4vw, 48px)',
-                color: 'var(--text-dark)',
-                marginBottom: '16px',
-                lineHeight: 1.2,
-              }}>
-                Dua titik masuk.<br />Satu standar verifikasi.
-              </h2>
-              <p style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '16px',
-                color: 'var(--text-muted)',
-                maxWidth: '480px',
-                lineHeight: 1.7,
-              }}>
-                Situasi pelaporan Anda — bukan skala perusahaan — yang menentukan jalur yang tepat.
-              </p>
-            </div>
-          </FadeIn>
-
-          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }} id="services-grid">
-            {services.map((s, i) => (
-              <FadeIn key={i} delay={i * 0.1}>
-                <div className="service-card">
-                  <PlaceholderImage
-                    src={s.photo}
-                    alt={s.photoAlt}
-                    className="photo-card"
-                    style={{ margin: '-40px -40px 32px -40px', width: 'calc(100% + 80px)' }}
-                  />
-                  <div className="overline" style={{ marginBottom: '12px' }}>{s.tag}</div>
-                  <h3 style={{
-                    fontFamily: 'Georgia, serif',
-                    fontSize: '24px',
-                    color: 'var(--text-dark)',
-                    marginBottom: '12px',
-                    lineHeight: 1.3,
-                  }}>
-                    {s.title}
-                  </h3>
-                  <p style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '15px',
-                    color: 'var(--text-muted)',
-                    marginBottom: '24px',
-                    lineHeight: 1.7,
-                  }}>
-                    {s.subtitle}
-                  </p>
-                  <ul style={{ listStyle: 'none', marginBottom: '24px' }}>
-                    {s.bullets.map((b, j) => (
-                      <li key={j} style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: '14px',
-                        color: 'var(--text-muted)',
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: '10px',
-                        marginBottom: '10px',
-                      }}>
-                        <CheckCircle size={14} style={{ color: 'var(--mckinsey-blue)', marginTop: '2px', flexShrink: 0 }} />
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
-                    <span className="duration-badge">{s.duration}</span>
-                    <Link to="/layanan" className="cta-link">
-                      Pelajari layanan →
-                    </Link>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-
-          {/* Entry product bar */}
-          <FadeIn delay={0.2}>
-            <div style={{
-              background: 'var(--deep-navy)',
-              padding: '40px 48px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: '24px',
-              position: 'relative',
-              overflow: 'hidden',
-            }}>
-              <div className="glow-blob" style={{ top: '-80px', right: '-80px', width: '300px', height: '300px' }} />
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                  <span className="overline-white">Entry Product — 2026</span>
-                  <span className="start-badge">Mulai di sini</span>
-                </div>
-                <h3 style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: '28px',
-                  color: 'white',
-                  marginBottom: '8px',
-                }}>
-                  PSPK Readiness Assessment
-                </h3>
-                <p style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '15px',
-                  color: 'rgba(255,255,255,0.6)',
-                  maxWidth: '480px',
-                  lineHeight: 1.6,
-                }}>
-                  Peta gap kesiapan PSPK 1/2 dalam 2–3 minggu. Tidak perlu komitmen besar. Langkah pertama yang paling rasional.
-                </p>
-              </div>
-              <Link to="/layanan" className="btn-primary" style={{ position: 'relative', zIndex: 1, flexShrink: 0 }}>
-                Mulai dari sini <ArrowRight size={15} />
-              </Link>
-            </div>
-          </FadeIn>
-        </div>
-
-        <style>{`
-          @media (max-width: 768px) {
-            #services-grid { grid-template-columns: 1fr !important; }
-          }
-        `}</style>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          METHODOLOGY
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="bg-dark wave-overlay section-pad">
-        <div className="container-bilmare" style={{ position: 'relative', zIndex: 1 }}>
-          <FadeIn>
-            <div className="fade-in-up" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px' }}>
-              <div>
-                <div className="overline-white" style={{ marginBottom: '16px' }}>Metodologi</div>
-                <h2 style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: 'clamp(28px, 4vw, 48px)',
-                  color: 'white',
-                  lineHeight: 1.2,
-                }}>
-                  The Four Layers.
-                </h2>
-              </div>
-              <Link to="/pendekatan" className="cta-link" style={{ color: 'rgba(255,255,255,0.7)', flexShrink: 0 }}>
-                Detail metodologi →
-              </Link>
-            </div>
-          </FadeIn>
-
-          <p className="fade-in-up" style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '18px',
-            color: 'rgba(255,255,255,0.65)',
-            maxWidth: '560px',
-            lineHeight: 1.7,
-            marginBottom: '64px',
-          }}>
-            Integritas pengungkapan dibangun lapis demi lapis — bukan diperiksa sekaligus di akhir.
-          </p>
-
-          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }} id="method-grid">
-            {methodology.map((m, i) => (
-              <FadeIn key={i} delay={i * 0.08}>
-                <div className="layer-step">
-                  <div className="layer-step-number">{m.num}</div>
-                  <h3 style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '17px',
-                    fontWeight: 600,
-                    color: 'white',
-                    marginBottom: '12px',
-                  }}>
-                    {m.name}
-                  </h3>
-                  <p style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '15px',
-                    color: 'rgba(255,255,255,0.65)',
-                    lineHeight: 1.7,
-                  }}>
-                    {m.desc}
-                  </p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-
-        <style>{`
-          @media (max-width: 1024px) {
-            #method-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          }
-          @media (max-width: 640px) {
-            #method-grid { grid-template-columns: 1fr !important; }
-          }
-        `}</style>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          WHO WE SERVE (Clients)
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="bg-vivid section-pad">
-        <div className="container-bilmare">
-          <FadeIn>
-            <div className="fade-in-up" style={{ marginBottom: '64px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '24px' }}>
-              <div>
-                <div className="overline-white" style={{ marginBottom: '16px' }}>Klien Kami</div>
-                <h2 style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: 'clamp(28px, 4vw, 48px)',
-                  color: 'white',
-                  maxWidth: '600px',
-                  lineHeight: 1.2,
-                }}>
-                  Perusahaan di mana kualitas pengungkapan berdampak langsung pada hasil bisnis.
-                </h2>
-              </div>
-              <Link to="/klien-kami" className="cta-link" style={{ color: 'rgba(255,255,255,0.8)', flexShrink: 0 }}>
-                Profil klien →
-              </Link>
-            </div>
-          </FadeIn>
-
-          <div className="fade-in-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2px' }} id="clients-grid">
-            {[
-              { title: 'Perusahaan Terbuka', desc: 'Emiten OJK dengan kewajiban pengungkapan berkala. Konsekuensi regulatori atas ketidaksesuaian pelaporan.' },
-              { title: 'Calon IPO', desc: 'Laporan publik pertama dalam konteks due diligence investor institusional. Zero margin for error.' },
-              { title: 'Entitas Diregulasi', desc: 'Perbankan, asuransi, dan utilitas dengan persyaratan transparansi ESG yang meningkat dari regulator sektor.' },
-              { title: 'Bisnis Keluarga', desc: 'Transisi ke standar tata kelola korporasi yang lebih formal. Dokumentasi metodologi dari nol.' },
-            ].map((c, i) => (
-              <FadeIn key={i} delay={i * 0.08}>
-                <div className="dark-card">
-                  <h3 style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '17px',
-                    fontWeight: 600,
-                    color: 'white',
-                    marginBottom: '12px',
-                  }}>
-                    {c.title}
-                  </h3>
-                  <p style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '14px',
-                    color: 'rgba(255,255,255,0.7)',
-                    lineHeight: 1.7,
-                  }}>
-                    {c.desc}
-                  </p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-
-        <style>{`
-          @media (max-width: 1024px) {
-            #clients-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          }
-          @media (max-width: 640px) {
-            #clients-grid { grid-template-columns: 1fr !important; }
-          }
-        `}</style>
-      </section>
-
-      {/* ════════════════════════════════════════════════════════════════
-          CTA
-      ════════════════════════════════════════════════════════════════ */}
-      <section className="bg-hero wave-overlay section-pad">
-        <div className="container-bilmare" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'center' }} id="cta-grid">
-            <FadeIn>
-              <div className="overline-white" style={{ marginBottom: '20px' }}>Diskusikan Kebutuhan Anda</div>
-              <h2 style={{
-                fontFamily: 'Georgia, serif',
-                fontSize: 'clamp(28px, 4vw, 52px)',
-                color: 'white',
-                marginBottom: '20px',
-                lineHeight: 1.15,
-              }}>
-                Kepercayaan masa depan dimulai dari pertanggungjawaban hari ini.
-              </h2>
-              <p style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '18px',
-                color: 'rgba(255,255,255,0.65)',
-                lineHeight: 1.7,
-              }}>
-                Hubungi tim Bilmare untuk asesmen awal. Tidak ada komitmen di tahap ini — hanya pemetaan kondisi laporan Anda saat ini.
-              </p>
-            </FadeIn>
-
-            <FadeIn delay={0.15}>
-              <div className="white-card">
-                <h3 style={{
-                  fontFamily: 'Georgia, serif',
-                  fontSize: '22px',
-                  color: 'var(--text-dark)',
-                  marginBottom: '28px',
-                }}>
-                  Mulai percakapan
-                </h3>
-                <div style={{ marginBottom: '32px' }}>
-                  {[
-                    'Penilaian gap kesiapan PSPK 1/2',
-                    'Review kondisi laporan yang sedang berjalan',
-                    'Konsultasi scope untuk engagement baru',
-                  ].map((item, i) => (
-                    <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px', marginBottom: '16px' }}>
-                      <div style={{
-                        width: '20px',
-                        height: '20px',
-                        border: '1px solid var(--mckinsey-blue)',
-                        background: 'rgba(34,81,255,0.08)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0,
-                        marginTop: '2px',
-                      }}>
-                        <CheckCircle size={11} style={{ color: 'var(--mckinsey-blue)' }} />
-                      </div>
-                      <span style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: '15px',
-                        color: 'var(--text-muted)',
-                        lineHeight: 1.6,
-                      }}>
-                        {item}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   to="/layanan"
-                  className="btn-primary"
-                  style={{ width: '100%', justifyContent: 'center', padding: '16px 28px' }}
+                  className="bg-mckinsey-blue text-white font-sans text-sm font-semibold py-4 px-8 rounded-sm hover:-translate-y-1 transition-transform inline-flex justify-center border border-transparent"
                 >
-                  Hubungi Kami
+                  Mulai PSPK Assessment
+                </Link>
+                <Link
+                  to="/metodologi"
+                  className="bg-transparent text-white font-sans text-sm font-semibold py-4 px-8 rounded-sm border border-white hover:bg-white hover:text-deep-navy transition-colors inline-flex justify-center items-center"
+                >
+                  Pelajari Metodologi Kami <span className="ml-2 font-mono">&rarr;</span>
                 </Link>
               </div>
             </FadeIn>
           </div>
-        </div>
 
-        <style>{`
-          @media (max-width: 1024px) {
-            #cta-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
-          }
-        `}</style>
+          {/* Abstract visual */}
+          <div className="w-full md:w-[35%] hidden sm:block">
+            <FadeIn delay={0.2}>
+              <div
+                className="aspect-[4/5] w-full max-w-[360px] mx-auto relative border border-white/10 p-6"
+              >
+                <div
+                  className="w-full h-full relative"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
+                    backgroundSize: '20px 20px',
+                  }}
+                >
+                  <div className="absolute top-[20%] left-[40%] w-2 h-2 rounded-full bg-mckinsey-blue shadow-[0_0_15px_5px_rgba(34,81,255,0.6)]" />
+                  <div className="absolute top-[60%] left-[80%] w-2 h-2 rounded-full bg-white shadow-[0_0_15px_5px_rgba(255,255,255,0.6)]" />
+                  <div className="absolute top-[80%] left-[20%] w-2 h-2 rounded-full bg-mckinsey-blue shadow-[0_0_15px_5px_rgba(34,81,255,0.6)]" />
+                  <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <line
+                      x1="40%"
+                      y1="20%"
+                      x2="80%"
+                      y2="60%"
+                      stroke="rgba(34,81,255,0.5)"
+                      strokeWidth="1"
+                      strokeDasharray="4 4"
+                    />
+                    <line
+                      x1="40%"
+                      y1="20%"
+                      x2="20%"
+                      y2="80%"
+                      stroke="rgba(255,255,255,0.3)"
+                      strokeWidth="1"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+        </div>
       </section>
 
+      {/* SECTION 2 — URGENCY */}
+      <section className="bg-white py-20 md:py-32">
+        <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
+          <FadeIn>
+            <div className="text-text-muted font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
+              KONTEKS PASAR
+            </div>
+            <h2 className="font-georgia text-text-dark text-[clamp(26px,4vw,48px)] leading-[1.2] font-semibold mb-14 max-w-3xl">
+              850+ emiten belum siap. Waktunya kurang dari 9 bulan.
+            </h2>
+          </FadeIn>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10 mb-16">
+            {[
+              { num: '956', desc: 'Emiten terdaftar di BEI per April 2026' },
+              { num: '6%', desc: 'Yang sudah di-assure — hanya 6 persen' },
+              { num: '850+', desc: 'Emiten yang belum siap menghadapi PSPK 1/2' },
+              { num: '< 9 bln', desc: 'Waktu tersisa sebelum 1 Januari 2027' },
+            ].map((stat, i) => (
+              <FadeIn key={i} delay={0.1 * i}>
+                <div className="pb-4 border-b-2 border-mckinsey-blue/20">
+                  <div className="font-georgia text-mckinsey-blue text-[clamp(36px,5vw,60px)] font-bold mb-3 leading-none">
+                    {stat.num}
+                  </div>
+                  <div className="font-sans text-text-muted text-sm leading-relaxed">{stat.desc}</div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 font-sans text-text-dark/80 leading-[1.75] text-base md:text-lg">
+            <FadeIn delay={0.2}>
+              <p>
+                PSPK 1 dan PSPK 2 adalah standar pengungkapan keberlanjutan yang diwajibkan oleh
+                OJK, selaras dengan kerangka global IFRS S1/S2 dan standar pelaporan GRI 2021.
+                Standar ini tidak lagi meminta narasi filantropi, melainkan data kuantitatif dan
+                analisis risiko fundamental bisnis terhadap faktor keberlanjutan.
+              </p>
+            </FadeIn>
+            <FadeIn delay={0.3}>
+              <p>
+                Konsekuensi dari ketidaksiapan bukan sekadar teguran administratif. Ini tentang
+                risiko regulasi, kegagalan mendapatkan opini <em>assurance</em> yang wajar, dan
+                yang paling krusial: <em>credibility gap</em> di mata investor institusional yang
+                kini mewajibkan integritas data ESG sebelum mengambil keputusan investasi.
+              </p>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3 — METHODOLOGY */}
+      <section className="bg-subtle-gradient py-20 md:py-32 relative overflow-hidden">
+        <div
+          className="absolute inset-0 opacity-[0.04] pointer-events-none"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(-45deg, transparent, transparent 10px, #ffffff 10px, #ffffff 11px)',
+          }}
+        />
+        <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 relative z-10">
+          <FadeIn>
+            <div className="text-mckinsey-blue font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
+              METODOLOGI BILMARE
+            </div>
+            <h2 className="font-georgia text-white text-[clamp(26px,4vw,48px)] leading-[1.2] font-semibold mb-16 max-w-3xl">
+              The Four Layers — Verifikasi yang tidak bisa dilewati.
+            </h2>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6 relative">
+            <div className="hidden lg:block absolute top-[28px] left-[10%] right-[10%] h-[1px] bg-white/20 z-0" />
+            {[
+              {
+                step: '01',
+                title: 'Data Integrity',
+                desc: 'Cross-check seluruh angka lintas Annual Report, Sustainability Report, dan Laporan Keuangan Audited.',
+              },
+              {
+                step: '02',
+                title: 'Regulatory Alignment',
+                desc: 'Setiap pengungkapan diperiksa terhadap PSPK 1/PSPK 2, GRI Standards 2021, dan SEOJK 16/2021.',
+              },
+              {
+                step: '03',
+                title: 'Assurance Readiness',
+                desc: 'Laporan disiapkan seolah assurance provider datang besok. Setiap klaim punya jejak sumber.',
+              },
+              {
+                step: '04',
+                title: 'Institutional Memory',
+                desc: 'Seluruh verifikasi disimpan terstruktur di sistem Bilmare per klien. Laporan tahun depan tidak mulai dari nol.',
+              },
+            ].map((layer, i) => (
+              <FadeIn key={i} delay={0.1 * i} className="relative z-10">
+                <div className="flex sm:flex-col items-start gap-5 sm:gap-0">
+                  <div className="w-14 h-14 rounded-full bg-deep-navy border border-mckinsey-blue flex items-center justify-center font-serif text-white text-xl font-bold sm:mb-8 shrink-0">
+                    {layer.step}
+                  </div>
+                  <div>
+                    <h3 className="font-sans font-semibold text-white text-lg sm:text-xl mb-3">
+                      {layer.title}
+                    </h3>
+                    <p className="font-sans text-white/75 leading-relaxed text-sm md:text-base">
+                      {layer.desc}
+                    </p>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4 — SERVICES */}
+      <section className="bg-white py-20 md:py-32">
+        <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
+          <FadeIn>
+            <div className="text-text-muted font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
+              LAYANAN
+            </div>
+            <h2 className="font-georgia text-text-dark text-[clamp(26px,4vw,48px)] leading-[1.2] font-semibold mb-12 max-w-2xl">
+              Dari assessment hingga laporan yang siap dipertanggungjawabkan.
+            </h2>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                badge: 'Mulai Di Sini',
+                title: 'PSPK Readiness Assessment',
+                tagline: '"Tahu gap Anda sebelum terlambat."',
+                desc: 'Klien tidak perlu commit besar dulu. Mereka membayar untuk mengetahui gap mereka. Setelah tahu, natural next step adalah minta Bilmare yang membenahi.',
+                duration: '2–3 minggu',
+                ideal: 'Semua emiten yang belum tahu kesiapan mereka',
+                label: 'Mulai Assessment',
+                featured: true,
+              },
+              {
+                title: 'Tier 1: Verification & Readiness',
+                tagline: '"Laporan yang sudah ditulis, diverifikasi dengan standar regulator."',
+                desc: 'Untuk perusahaan yang sudah punya draft laporan dan butuh mata independen. Verifikasi cross-document, gap analysis terhadap 203 requirement GRI/IFRS/SEOJK.',
+                duration: '3–4 minggu',
+                ideal: 'Emiten terbuka, anak perusahaan MNC, pra-assurance',
+                label: 'Pelajari Tier 1',
+                featured: false,
+              },
+              {
+                title: 'Tier 2: Full Accountable Report',
+                tagline: '"Dari data ke laporan yang siap dipertanggungjawabkan."',
+                desc: 'Untuk perusahaan yang belum punya draft sama sekali. Bilmare memulai dengan memverifikasi dan membangun Master Matrix sebagai single source of truth.',
+                duration: '8–12 minggu',
+                ideal: 'Calon IPO, bisnis keluarga transisi, laporan perdana',
+                label: 'Pelajari Tier 2',
+                featured: false,
+              },
+              {
+                title: 'Institutional Memory Retainer',
+                tagline: '"Investasi yang nilainya bertumbuh setiap tahun."',
+                desc: 'Seluruh data historis klien — Master Matrix, time-series database, definisi metrik, source archive — tetap terjaga dan menjadi baseline laporan tahun depan.',
+                duration: 'Ongoing / Tahunan',
+                ideal: 'Klien eksisting Tier 1 atau Tier 2',
+                label: 'Pelajari Retainer',
+                featured: false,
+              },
+            ].map((svc, i) => (
+              <FadeIn key={i} delay={0.1 * (i + 1)}>
+                <div
+                  className={`bg-white border-t-4 ${
+                    svc.featured ? 'border-t-mckinsey-blue' : 'border-t-line hover:border-t-mckinsey-blue'
+                  } border border-line p-7 md:p-10 hover:shadow-xl transition-all duration-300 h-full flex flex-col`}
+                >
+                  {svc.badge && (
+                    <div className="mb-4">
+                      <span className="bg-mckinsey-blue/10 text-mckinsey-blue text-[10px] uppercase tracking-wider font-bold px-3 py-1 rounded inline-block">
+                        {svc.badge}
+                      </span>
+                    </div>
+                  )}
+                  {!svc.badge && <div className="mb-4 h-6" />}
+                  <h3 className="font-georgia font-bold text-xl md:text-2xl mb-3">{svc.title}</h3>
+                  <p className="font-sans text-mckinsey-blue font-medium mb-5 text-[15px]">{svc.tagline}</p>
+                  <div className="font-sans text-text-dark/70 text-[15px] leading-relaxed mb-6 flex-grow">
+                    {svc.desc}
+                  </div>
+                  <div className="border-t border-line pt-5 font-sans text-sm mb-5">
+                    <div className="font-semibold text-text-dark mb-1">
+                      Durasi: <span className="font-normal text-text-muted">{svc.duration}</span>
+                    </div>
+                    <div className="font-semibold text-text-dark">
+                      Ideal Untuk: <span className="font-normal text-text-muted">{svc.ideal}</span>
+                    </div>
+                  </div>
+                  <Link
+                    to="/layanan"
+                    className="text-mckinsey-blue font-sans font-semibold text-[15px] hover:text-blue-mid inline-flex items-center mt-auto w-fit"
+                  >
+                    {svc.label} <span className="ml-2 font-mono">&rarr;</span>
+                  </Link>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 5 — WHO WE SERVE */}
+      <section className="bg-vivid-gradient py-20 md:py-32">
+        <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
+          <FadeIn>
+            <div className="text-white/80 font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
+              SIAPA YANG KAMI BANTU
+            </div>
+            <h2 className="font-georgia text-white text-[clamp(24px,4vw,44px)] leading-[1.3] font-semibold mb-12 max-w-4xl">
+              Kami bekerja dengan emiten, calon IPO, dan perusahaan yang memahami bahwa pengungkapan
+              bukan sekadar kewajiban.
+            </h2>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {[
+              {
+                title: 'Emiten BEI Mid-Cap',
+                desc: 'Belum di-assure, mendekati deadline PSPK 1/2. Pintu masuk: PSPK Readiness Assessment.',
+                contact: 'Corporate Secretary / Head of Finance',
+              },
+              {
+                title: 'Perusahaan Calon IPO (Series B+)',
+                desc: 'Pre-IPO Disclosure Readiness. Investor due diligence membutuhkan pengungkapan yang dapat dipertanggungjawabkan.',
+                contact: 'CFO / Head of Corporate Finance',
+              },
+              {
+                title: 'Perbankan & Asuransi',
+                desc: 'Beroperasi di bawah regulasi ketat OJK. Memerlukan verification dan assurance readiness layer mendalam.',
+                contact: 'Corporate Secretary / Compliance Director',
+              },
+              {
+                title: 'Bisnis Keluarga Transisi',
+                desc: 'Sedang menuju tata kelola modern. Membangun laporan perdana yang membangun kredibilitas institusional.',
+                contact: 'Board of Directors / Sustainability Lead',
+              },
+            ].map((segment, i) => (
+              <FadeIn key={i} delay={0.1 * i}>
+                <div className="bg-deep-navy/30 backdrop-blur-sm border border-white/10 p-7 md:p-8 h-full flex flex-col hover:bg-deep-navy/40 transition-colors">
+                  <h3 className="font-georgia text-white text-lg md:text-xl font-bold mb-4">
+                    {segment.title}
+                  </h3>
+                  <p className="font-sans text-white/80 text-[15px] leading-relaxed mb-5 flex-grow">
+                    {segment.desc}
+                  </p>
+                  <div className="font-sans text-white/50 text-[13px] border-t border-white/10 pt-4 mt-auto">
+                    Kontak Utama: <span className="text-white">{segment.contact}</span>
+                  </div>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 6 — WHY BILMARE */}
+      <section className="bg-white py-20 md:py-32">
+        <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
+          <FadeIn>
+            <div className="text-text-muted font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
+              MENGAPA BILMARE
+            </div>
+            <h2 className="font-georgia text-text-dark text-[clamp(24px,4vw,48px)] leading-[1.2] font-semibold mb-16 max-w-3xl">
+              Bukan konsultan generik. Bukan agency laporan. Satu-satunya spesialis PSPK 1/PSPK 2 di
+              Indonesia.
+            </h2>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16">
+            {[
+              {
+                num: '01',
+                title: 'Spesialisasi Tunggal',
+                desc: 'Bilmare hanya mengerjakan satu hal: cross-document disclosure readiness dan reconciliation menghadapi PSPK 1/PSPK 2. Tidak ada proyek lain yang mengalihkan perhatian kami.',
+              },
+              {
+                num: '02',
+                title: 'Verifikasi, Bukan Penulisan',
+                desc: 'Setiap klaim dapat dipertanggungjawabkan di hadapan regulator, investor, dan assurance provider. Kami bekerja dengan metodologi empat layer yang terstruktur dan terdokumentasi.',
+              },
+              {
+                num: '03',
+                title: 'Institutional Memory',
+                desc: 'Data historis klien tersimpan di sistem Bilmare. Laporan tahun berikutnya tidak mulai dari nol. Ini adalah moat jangka panjang yang genuinely tidak bisa dipindahkan ke vendor lain.',
+              },
+            ].map((item, i) => (
+              <FadeIn key={i} delay={0.1 * i}>
+                <div className="border-t-2 border-mckinsey-blue pt-6">
+                  <div className="font-sans text-text-muted font-semibold tracking-wider text-sm mb-4">
+                    {item.num}
+                  </div>
+                  <h3 className="font-georgia font-bold text-xl md:text-[22px] leading-[1.3] mb-4 text-text-dark">
+                    {item.title}
+                  </h3>
+                  <p className="font-sans text-text-dark/70 text-[15px] leading-relaxed">{item.desc}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 7 — CTA / CONTACT FORM */}
+      <section className="bg-deep-navy py-20 md:py-32 relative overflow-hidden">
+        <div className="absolute top-[30%] left-[50%] -translate-x-1/2 w-[600px] h-[400px] md:w-[800px] md:h-[500px] rounded-full bg-mckinsey-blue opacity-[0.2] blur-[150px] pointer-events-none" />
+
+        <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 relative z-10 flex flex-col items-center">
+          <FadeIn className="text-center mb-10 md:mb-12">
+            <div className="text-mckinsey-blue font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
+              MULAI SEKARANG
+            </div>
+            <h2 className="font-georgia text-white text-[clamp(28px,5vw,56px)] leading-[1.1] font-bold mb-5">
+              Mulai Sebelum Waktunya Habis
+            </h2>
+            <p className="font-sans text-white/80 text-base md:text-[17px] leading-relaxed max-w-2xl mx-auto">
+              Jadwalkan discovery call gratis untuk memahami gap kesiapan PSPK 1/2 perusahaan Anda.
+              Tim Bilmare akan menghubungi Anda dalam 1×24 jam.
+            </p>
+          </FadeIn>
+
+          <FadeIn delay={0.2} className="w-full max-w-[640px]">
+            <ContactForm source="home" />
+          </FadeIn>
+        </div>
+      </section>
     </div>
   );
 }

@@ -1,26 +1,41 @@
-import React from 'react';
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './Layout';
-import Home from './pages/Home';
-import Layanan from './pages/Layanan';
-import Pendekatan from './pages/Pendekatan';
-import KlienKami from './pages/KlienKami';
-import { Insight, TentangKami, Login } from './pages/MiscPages';
+import Nav from './components/Nav';
+import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
+
+const Home = lazy(() => import('./pages/Home'));
+const Layanan = lazy(() => import('./pages/Layanan'));
+const Metodologi = lazy(() => import('./pages/Metodologi'));
+const TentangKami = lazy(() => import('./pages/TentangKami'));
+const Kontak = lazy(() => import('./pages/Kontak'));
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="layanan" element={<Layanan />} />
-          <Route path="pendekatan" element={<Pendekatan />} />
-          <Route path="klien-kami" element={<KlienKami />} />
-          <Route path="insight" element={<Insight />} />
-          <Route path="tentang-kami" element={<TentangKami />} />
-          <Route path="login" element={<Login />} />
-        </Route>
-      </Routes>
+      <ScrollToTop />
+      <div className="flex flex-col min-h-screen bg-off-white font-sans">
+
+        <Nav />
+        <main className="flex-grow">
+          <Suspense fallback={<div className="h-screen flex items-center justify-center bg-deep-navy text-white font-georgia">Loading...</div>}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/layanan" element={<Layanan />} />
+              <Route path="/metodologi" element={<Metodologi />} />
+              <Route path="/tentang-kami" element={<TentangKami />} />
+              <Route path="/kontak" element={<Kontak />} />
+            </Routes>
+          </Suspense>
+        </main>
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 }
+
