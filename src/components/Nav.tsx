@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -14,8 +14,7 @@ export default function Nav() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-
-  const portalClientUrl = import.meta.env.VITE_PORTAL_CLIENT_URL || '#';
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
@@ -62,14 +61,12 @@ export default function Nav() {
                 {link.name}
               </Link>
             ))}
-            <a
-              href={portalClientUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => navigate('/login')}
               className="border border-white text-white px-5 py-2 rounded-sm text-sm font-semibold uppercase hover:bg-white hover:text-deep-navy transition-colors whitespace-nowrap"
             >
-              Client Login
-            </a>
+              Login
+            </button>
           </div>
 
           {/* Mobile Toggle */}
@@ -121,14 +118,12 @@ export default function Nav() {
               transition={{ delay: navLinks.length * 0.07 + 0.05, duration: 0.25 }}
               className="mt-8 w-full"
             >
-              <a
-                href={portalClientUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-center border border-white text-white py-4 rounded-sm font-semibold text-sm uppercase tracking-wider hover:bg-white hover:text-deep-navy transition-colors"
+              <button
+                onClick={() => { setMobileMenuOpen(false); navigate('/login'); }}
+                className="block w-full text-center border border-white text-white py-4 rounded-sm font-semibold text-sm uppercase tracking-wider hover:bg-white hover:text-deep-navy transition-colors"
               >
-                Client Login
-              </a>
+                Login
+              </button>
             </motion.div>
           </motion.div>
         )}
