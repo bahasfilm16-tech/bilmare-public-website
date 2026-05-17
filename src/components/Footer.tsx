@@ -17,21 +17,21 @@ export default function Footer() {
               Bilmare
             </Link>
             <p className="text-white/75 text-sm font-sans italic max-w-xs leading-relaxed">
-              Kepercayaan masa depan dimulai dari pertanggungjawaban hari ini.
+              Every claim. Verified.
             </p>
           </div>
 
-          {/* Layanan */}
+          {/* Services */}
           <div>
             <h4 className="text-white font-semibold text-xs uppercase tracking-widest mb-5">
-              Layanan
+              SERVICES
             </h4>
             <ul className="space-y-3">
               {[
                 'PSPK Readiness Assessment',
-                'Tier 1: Verification',
-                'Tier 2: Full Development',
-                'Institutional Retainer',
+                'Tier 1: Verification & Readiness',
+                'Tier 2: Full Accountable Report',
+                'Institutional Memory Retainer',
               ].map((item) => (
                 <li key={item}>
                   <Link
@@ -45,10 +45,10 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Perusahaan */}
+          {/* Company */}
           <div>
             <h4 className="text-white font-semibold text-xs uppercase tracking-widest mb-5">
-              Perusahaan
+              COMPANY
             </h4>
             <ul className="space-y-3">
               <li>
@@ -56,7 +56,7 @@ export default function Footer() {
                   to="/tentang-kami"
                   className="text-white/65 hover:text-white transition-colors text-sm"
                 >
-                  Tentang Kami
+                  About
                 </Link>
               </li>
               <li>
@@ -64,7 +64,7 @@ export default function Footer() {
                   to="/metodologi"
                   className="text-white/65 hover:text-white transition-colors text-sm"
                 >
-                  Metodologi
+                  Methodology
                 </Link>
               </li>
               <li>
@@ -72,16 +72,16 @@ export default function Footer() {
                   to="/kontak"
                   className="text-white/65 hover:text-white transition-colors text-sm"
                 >
-                  Kontak
+                  Contact
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Kontak */}
+          {/* Contact */}
           <div>
             <h4 className="text-white font-semibold text-xs uppercase tracking-widest mb-5">
-              Kontak
+              CONTACT
             </h4>
             <ul className="space-y-3">
               <li className="text-white/65 text-sm">Jakarta, Indonesia</li>
@@ -99,7 +99,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-white/65 hover:text-white transition-colors text-sm mt-1"
-                  aria-label="Bilmare di LinkedIn"
+                  aria-label="Bilmare on LinkedIn"
                 >
                   <svg className="w-5 h-5 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
                     <path
@@ -117,7 +117,7 @@ export default function Footer() {
 
         <div className="border-t border-mid-navy pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-white/45 text-xs font-sans">
-            &copy; 2026 Bilmare. All rights reserved.
+            &copy; {new Date().getFullYear()} Bilmare. All rights reserved.
           </p>
           <div className="flex items-center gap-5">
             <a
@@ -126,7 +126,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="text-white/65 hover:text-white hover:text-mckinsey-blue transition-colors text-sm flex items-center gap-1"
             >
-              Client Login <span className="font-mono">&rarr;</span>
+              Client Login
             </a>
             <span className="text-white/20">|</span>
             <a
@@ -135,7 +135,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="text-white/65 hover:text-white hover:text-mckinsey-blue transition-colors text-sm flex items-center gap-1"
             >
-              Team Login <span className="font-mono">&rarr;</span>
+              Team Login
             </a>
           </div>
         </div>

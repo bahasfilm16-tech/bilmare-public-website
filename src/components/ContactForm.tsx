@@ -61,7 +61,7 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
 
     if (dbError) {
       setError(
-        'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi atau hubungi kami langsung di info@bilmare.com'
+        'Something went wrong. Please try again or reach us directly at info@bilmare.com'
       );
     } else {
       setSuccess(true);
@@ -84,16 +84,16 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="font-georgia text-text-dark text-2xl font-bold mb-4">Terima Kasih!</h3>
+        <h3 className="font-georgia text-text-dark text-2xl font-bold mb-4">Thank You.</h3>
         <p className="font-sans text-text-muted text-[15px] leading-relaxed mb-8">
-          Pesan Anda telah kami terima. Tim Bilmare akan menghubungi Anda dalam{' '}
-          <strong>1×24 jam kerja</strong> melalui email atau WhatsApp yang Anda daftarkan.
+          Your message has been received. We will be in touch within one business day via email
+          or WhatsApp.
         </p>
         <button
           onClick={() => setSuccess(false)}
           className="font-sans text-mckinsey-blue text-sm font-semibold hover:text-blue-mid transition-colors underline underline-offset-4"
         >
-          Kirim pesan lain
+          Send another message
         </button>
       </div>
     );
@@ -104,7 +104,7 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
         <div>
           <label className="block font-sans text-text-dark text-[13px] font-semibold mb-2">
-            Nama Lengkap *
+            Full Name *
           </label>
           <input
             required
@@ -118,7 +118,7 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
         </div>
         <div>
           <label className="block font-sans text-text-dark text-[13px] font-semibold mb-2">
-            Nama Perusahaan *
+            Company Name *
           </label>
           <input
             required
@@ -135,7 +135,7 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
         <div>
           <label className="block font-sans text-text-dark text-[13px] font-semibold mb-2">
-            Jabatan
+            Position
           </label>
           <input
             type="text"
@@ -148,7 +148,7 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
         </div>
         <div>
           <label className="block font-sans text-text-dark text-[13px] font-semibold mb-2">
-            Email Bisnis *
+            Business Email *
           </label>
           <input
             required
@@ -156,7 +156,7 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
             name="email"
             value={form.email}
             onChange={handle}
-            placeholder="anda@perusahaan.com"
+            placeholder="you@company.com"
             className={INPUT_CLASS}
           />
         </div>
@@ -164,7 +164,7 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
 
       <div className="mb-5">
         <label className="block font-sans text-text-dark text-[13px] font-semibold mb-2">
-          Nomor WhatsApp *
+          WhatsApp Number *
         </label>
         <input
           required
@@ -179,7 +179,7 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
 
       <div className="mb-5">
         <label className="block font-sans text-text-dark text-[13px] font-semibold mb-2">
-          Saya tertarik dengan
+          I am interested in
         </label>
         <select
           name="layanan"
@@ -191,21 +191,21 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
           <option>Tier 1 – Verification &amp; Disclosure Readiness</option>
           <option>Tier 2 – Full Report Development</option>
           <option>Institutional Memory Retainer</option>
-          <option>Belum tahu — ingin konsultasi dulu</option>
+          <option>Not sure yet, would like to discuss first</option>
         </select>
       </div>
 
       <div className="mb-7">
         <label className="block font-sans text-text-dark text-[13px] font-semibold mb-2">
-          Ada yang ingin Anda ceritakan?{' '}
-          <span className="font-normal text-text-muted">(Opsional)</span>
+          Anything to share?{' '}
+          <span className="font-normal text-text-muted">(Optional)</span>
         </label>
         <textarea
           rows={4}
           name="pesan"
           value={form.pesan}
           onChange={handle}
-          placeholder="Ceritakan situasi perusahaan Anda..."
+          placeholder="Share the current reporting situation, timeline, or specific concerns..."
           className={`${INPUT_CLASS} resize-none`}
         />
       </div>
@@ -231,16 +231,12 @@ export default function ContactForm({ source = 'kontak' }: ContactFormProps) {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
               />
             </svg>
-            Mengirim...
+            Sending...
           </>
         ) : (
-          'Kirim & Jadwalkan Discovery Call'
+          'Schedule a Discovery Call'
         )}
       </button>
-
-      <p className="text-center font-sans text-text-muted text-[13px]">
-        Tim Bilmare akan menghubungi Anda dalam 1×24 jam kerja.
-      </p>
     </form>
   );
 }

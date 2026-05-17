@@ -5,8 +5,8 @@ const layers = [
   {
     num: '01',
     title: 'Data Integrity',
-    subtitle: 'Tidak ada angka yang dibiarkan berdiri sendiri tanpa validasi silang.',
-    desc: 'Layer pertama kami membangun landasan yang absolut. Kami melakukan cross-check secara menyeluruh lintas dokumen: Annual Report, Sustainability Report, dan Laporan Keuangan Audited. Setiap angka yang dirujuk dalam dokumen yang berbeda harus identik, atau harus memiliki bridging explanation yang terdokumentasi dengan jelas menghindari diskrepansi di meja komite audit.',
+    subtitle: 'No figure is left standing without cross-validation.',
+    desc: 'The first layer establishes an absolute foundation. We perform a thorough cross-check across documents: the Annual Report, Sustainability Report, and Audited Financial Statements. Every figure referenced across different documents must be identical, or must have a clearly documented bridging explanation to avoid discrepancies at the audit committee.',
     bgClass: 'bg-white',
     textClass: 'text-text-dark',
     numClass: 'text-mckinsey-blue',
@@ -14,8 +14,8 @@ const layers = [
   {
     num: '02',
     title: 'Regulatory Alignment',
-    subtitle: 'Memetakan setiap klaim ke kerangka standar wajib.',
-    desc: 'Pengungkapan tanpa kepatuhan standar berpotensi mengundang teguran OJK. Pada layer kedua, setiap klaim dan metrik yang diungkapkan diperiksa gap-nya terhadap persyaratan ketat dari PSPK 1/PSPK 2 (yang wajib pada 1 Jan 2027), GRI Standards 2021, dan SEOJK 16/2021. Setiap defisiensi didokumentasikan dengan tingkat severity yang mengukur risiko regulasi yang dihadapi emiten.',
+    subtitle: 'Mapping every claim to the applicable regulatory framework.',
+    desc: 'Disclosure without regulatory alignment risks OJK censure. In the second layer, every claim and metric is reviewed for gaps against the requirements of PSPK 1/PSPK 2 (mandatory from 1 January 2027), GRI Standards 2021, and SEOJK 16/2021. Every deficiency is documented with a severity rating that measures the regulatory risk facing the company.',
     bgClass: 'bg-off-white',
     textClass: 'text-text-dark',
     numClass: 'text-mckinsey-blue/30',
@@ -23,8 +23,8 @@ const layers = [
   {
     num: '03',
     title: 'Assurance Readiness',
-    subtitle: 'Laporan yang dibangun seolah assurance provider datang besok.',
-    desc: 'Assurance audit sering menemukan celah akibat hilangnya jejak sumber data. Fokus layer ketiga kami memastikan setiap klaim memiliki jejak sumber audit (audit trail) yang jelas. Setiap metrik non-finansial harus memiliki definisi pengukuran yang baku dan konsisten secara periodik (Year-on-Year). Ini menutup peluang assurance failure.',
+    subtitle: 'Reports built as though the assurance provider is arriving tomorrow.',
+    desc: 'Assurance audits frequently uncover gaps caused by missing source trails. The third layer ensures every claim has a clear audit trail. Every non-financial metric must have a standardised measurement definition that is consistent from year to year. This closes the opportunity for assurance failure.',
     bgClass: 'bg-white',
     textClass: 'text-text-dark',
     numClass: 'text-mckinsey-blue',
@@ -32,8 +32,8 @@ const layers = [
   {
     num: '04',
     title: 'Institutional Memory',
-    subtitle: 'Membongkar proteksionisme data agar aset pengetahuan ada di tangan perusahaan.',
-    desc: 'Layer keempat adalah moat sistem kami yang akan ditanamkan di perusahaan Anda. Seluruh bukti verifikasi, rekam jejak, definisi, dan arsitektur pengungkapan disimpan secara terstruktur di dalam sistem Bilmare per entitas klien. Tahun depan, pembuatan laporan tidak akan pernah mulai dari nol lagi. Pengetahuan institusional ini dikelola dan berkembang nilainya setiap tahun.',
+    subtitle: 'Ensuring institutional knowledge remains with the company, not the advisor.',
+    desc: 'The fourth layer is the structural advantage of working with Bilmare. All verification evidence, records, definitions, and disclosure architecture are stored systematically within the Bilmare Engine per client. The next reporting cycle never starts from zero. This institutional knowledge is managed and grows in value with each engagement.',
     bgClass: 'bg-subtle-gradient',
     textClass: 'text-white',
     numClass: 'text-white/20',
@@ -48,15 +48,15 @@ export default function Metodologi() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 py-20 md:py-28 relative z-10">
           <FadeIn>
             <div className="text-white/80 font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-6">
-              METODOLOGI KAMI
+              OUR METHODOLOGY
             </div>
             <h1 className="font-georgia text-white text-[clamp(36px,6vw,72px)] leading-[1.1] font-bold mb-7 max-w-4xl">
-              Verifikasi yang tidak bisa dilewati.
+              Verification that cannot be skipped.
             </h1>
             <p className="font-sans text-white/90 text-base md:text-xl leading-relaxed max-w-3xl">
-              Apa yang membuat pendekatan Bilmare berbeda adalah kami menolak menjadikan pembuatan
-              laporan sebagai kerja penulisan kreatif semata. Bilmare mendekati pengungkapan
-              keberlanjutan layaknya audit finansial. Kami menyebutnya "The Four Layers".
+              What distinguishes Bilmare's approach is a refusal to treat report preparation as a
+              creative writing exercise. Bilmare approaches sustainability disclosure the way a
+              financial auditor approaches financial statements. We call this The Four Layers.
             </p>
           </FadeIn>
         </div>
@@ -119,14 +119,13 @@ export default function Metodologi() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 relative z-10 text-center">
           <FadeIn>
             <h2 className="font-georgia text-white text-[clamp(28px,4vw,48px)] leading-[1.3] font-semibold mb-7 max-w-4xl mx-auto">
-              Setiap output dapat dipertanggungjawabkan di hadapan regulator, investor, dan
-              assurance provider.
+              Every output is defensible to regulators, investors, and assurance providers.
             </h2>
             <Link
               to="/layanan"
               className="bg-mckinsey-blue hover:bg-blue-mid text-white font-sans text-sm font-semibold py-4 px-10 rounded-sm transition-colors inline-block"
             >
-              Lihat Layanan Kami <span className="ml-2 font-mono">&rarr;</span>
+              See Our Services
             </Link>
           </FadeIn>
         </div>

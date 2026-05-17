@@ -19,30 +19,25 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 relative z-10 w-full flex flex-col md:flex-row items-center justify-between gap-12 py-16 md:py-24">
           <div className="w-full md:w-[60%] lg:w-[55%]">
             <FadeIn>
-              <div className="text-mckinsey-blue font-sans text-xs tracking-[0.15em] uppercase font-semibold mb-5">
-                PSPK 1 / PSPK 2 — WAJIB 1 JANUARI 2027
-              </div>
               <h1 className="font-georgia text-white text-[clamp(36px,6vw,84px)] leading-[1.1] font-bold mb-7">
-                Setiap klaim dalam laporan Anda — dapat dipertanggungjawabkan.
+                Every claim defensible.
               </h1>
               <p className="font-sans text-white/80 text-base md:text-xl leading-relaxed mb-9 max-w-2xl">
-                Bilmare adalah satu-satunya firma di Indonesia yang mengkhususkan diri mempersiapkan
-                laporan emiten menghadapi kewajiban PSPK 1/PSPK 2 per Januari 2027 — dengan
-                metodologi verifikasi yang memastikan setiap klaim dapat dipertanggungjawabkan di
-                hadapan regulator, investor, dan assurance provider.
+                PSPK 1 and PSPK 2 take effect January 2027. Bilmare works with listed companies to
+                ensure their reports are audit-ready before the deadline. Not after the findings.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   to="/layanan"
                   className="bg-mckinsey-blue text-white font-sans text-sm font-semibold py-4 px-8 rounded-sm hover:-translate-y-1 transition-transform inline-flex justify-center border border-transparent"
                 >
-                  Mulai PSPK Assessment
+                  Start Your Assessment
                 </Link>
                 <Link
                   to="/metodologi"
                   className="bg-transparent text-white font-sans text-sm font-semibold py-4 px-8 rounded-sm border border-white hover:bg-white hover:text-deep-navy transition-colors inline-flex justify-center items-center"
                 >
-                  Pelajari Metodologi Kami <span className="ml-2 font-mono">&rarr;</span>
+                  See How We Work
                 </Link>
               </div>
             </FadeIn>
@@ -96,19 +91,19 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
           <FadeIn>
             <div className="text-text-muted font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
-              KONTEKS PASAR
+              MARKET CONTEXT
             </div>
             <h2 className="font-georgia text-text-dark text-[clamp(26px,4vw,48px)] leading-[1.2] font-semibold mb-14 max-w-3xl">
-              850+ emiten belum siap. Waktunya kurang dari 9 bulan.
+              Most listed companies are not ready. The deadline is fixed.
             </h2>
           </FadeIn>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-10 mb-16">
             {[
-              { num: '956', desc: 'Emiten terdaftar di BEI per April 2026' },
-              { num: '6%', desc: 'Yang sudah di-assure — hanya 6 persen' },
-              { num: '850+', desc: 'Emiten yang belum siap menghadapi PSPK 1/2' },
-              { num: '< 9 bln', desc: 'Waktu tersisa sebelum 1 Januari 2027' },
+              { num: '956', desc: 'Listed companies on IDX' },
+              { num: '6%', desc: 'Have assurance-ready sustainability reports' },
+              { num: '850+', desc: 'Not yet compliant with PSPK 1/2' },
+              { num: '2027', desc: 'The year compliance becomes mandatory' },
             ].map((stat, i) => (
               <FadeIn key={i} delay={0.1 * i}>
                 <div className="pb-4 border-b-2 border-mckinsey-blue/20">
@@ -124,18 +119,16 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 font-sans text-text-dark/80 leading-[1.75] text-base md:text-lg">
             <FadeIn delay={0.2}>
               <p>
-                PSPK 1 dan PSPK 2 adalah standar pengungkapan keberlanjutan yang diwajibkan oleh
-                OJK, selaras dengan kerangka global IFRS S1/S2 dan standar pelaporan GRI 2021.
-                Standar ini tidak lagi meminta narasi filantropi, melainkan data kuantitatif dan
-                analisis risiko fundamental bisnis terhadap faktor keberlanjutan.
+                PSPK 1 and PSPK 2 are sustainability disclosure standards mandated by OJK, aligned
+                with IFRS S1/S2 and GRI 2021. They require quantitative data, business risk
+                analysis, and disclosures that can withstand independent scrutiny.
               </p>
             </FadeIn>
             <FadeIn delay={0.3}>
               <p>
-                Konsekuensi dari ketidaksiapan bukan sekadar teguran administratif. Ini tentang
-                risiko regulasi, kegagalan mendapatkan opini <em>assurance</em> yang wajar, dan
-                yang paling krusial: <em>credibility gap</em> di mata investor institusional yang
-                kini mewajibkan integritas data ESG sebelum mengambil keputusan investasi.
+                The consequences of non-compliance extend beyond regulatory penalties. Institutional
+                investors now require verified ESG data before making investment decisions. A report
+                that cannot be defended is a report that cannot be trusted.
               </p>
             </FadeIn>
           </div>
@@ -154,10 +147,10 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 relative z-10">
           <FadeIn>
             <div className="text-mckinsey-blue font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
-              METODOLOGI BILMARE
+              BILMARE METHODOLOGY
             </div>
             <h2 className="font-georgia text-white text-[clamp(26px,4vw,48px)] leading-[1.2] font-semibold mb-16 max-w-3xl">
-              The Four Layers — Verifikasi yang tidak bisa dilewati.
+              The Four Layers of Verification.
             </h2>
           </FadeIn>
 
@@ -167,22 +160,22 @@ export default function Home() {
               {
                 step: '01',
                 title: 'Data Integrity',
-                desc: 'Cross-check seluruh angka lintas Annual Report, Sustainability Report, dan Laporan Keuangan Audited.',
+                desc: 'Every figure is verified across the Annual Report, Sustainability Report, and Audited Financial Statements.',
               },
               {
                 step: '02',
                 title: 'Regulatory Alignment',
-                desc: 'Setiap pengungkapan diperiksa terhadap PSPK 1/PSPK 2, GRI Standards 2021, dan SEOJK 16/2021.',
+                desc: 'Every disclosure is reviewed against current regulatory and reporting frameworks, including PSPK 1/PSPK 2 and GRI Standards.',
               },
               {
                 step: '03',
                 title: 'Assurance Readiness',
-                desc: 'Laporan disiapkan seolah assurance provider datang besok. Setiap klaim punya jejak sumber.',
+                desc: 'Reports are prepared to the standard an assurance provider would expect. Every claim has a documented source.',
               },
               {
                 step: '04',
                 title: 'Institutional Memory',
-                desc: 'Seluruh verifikasi disimpan terstruktur di sistem Bilmare per klien. Laporan tahun depan tidak mulai dari nol.',
+                desc: 'All verification records are stored systematically in the Bilmare Engine. Each engagement builds on the last.',
               },
             ].map((layer, i) => (
               <FadeIn key={i} delay={0.1 * i} className="relative z-10">
@@ -210,50 +203,50 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
           <FadeIn>
             <div className="text-text-muted font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
-              LAYANAN
+              SERVICES
             </div>
             <h2 className="font-georgia text-text-dark text-[clamp(26px,4vw,48px)] leading-[1.2] font-semibold mb-12 max-w-2xl">
-              Dari assessment hingga laporan yang siap dipertanggungjawabkan.
+              From assessment to a report that holds.
             </h2>
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
               {
-                badge: 'Mulai Di Sini',
+                badge: 'Start Here',
                 title: 'PSPK Readiness Assessment',
-                tagline: '"Tahu gap Anda sebelum terlambat."',
-                desc: 'Klien tidak perlu commit besar dulu. Mereka membayar untuk mengetahui gap mereka. Setelah tahu, natural next step adalah minta Bilmare yang membenahi.',
-                duration: '2–3 minggu',
-                ideal: 'Semua emiten yang belum tahu kesiapan mereka',
-                label: 'Mulai Assessment',
+                tagline: 'A clear picture of where the report stands.',
+                desc: 'A structured assessment of where the report stands against current regulatory requirements. The findings determine what comes next.',
+                duration: '2–3 weeks',
+                ideal: 'Listed companies that have not assessed their compliance readiness',
+                label: 'Start Assessment',
                 featured: true,
               },
               {
                 title: 'Tier 1: Verification & Readiness',
-                tagline: '"Laporan yang sudah ditulis, diverifikasi dengan standar regulator."',
-                desc: 'Untuk perusahaan yang sudah punya draft laporan dan butuh mata independen. Verifikasi cross-document, gap analysis terhadap 203 requirement GRI/IFRS/SEOJK.',
-                duration: '3–4 minggu',
-                ideal: 'Emiten terbuka, anak perusahaan MNC, pra-assurance',
-                label: 'Pelajari Tier 1',
+                tagline: 'An independent eye on every disclosure.',
+                desc: 'For companies with an existing draft that requires independent verification. Bilmare reviews cross-document consistency and alignment with applicable GRI, IFRS, and regulatory requirements.',
+                duration: '3–4 weeks',
+                ideal: 'Listed companies, MNC subsidiaries, and companies preparing for assurance',
+                label: 'See Tier 1',
                 featured: false,
               },
               {
                 title: 'Tier 2: Full Accountable Report',
-                tagline: '"Dari data ke laporan yang siap dipertanggungjawabkan."',
-                desc: 'Untuk perusahaan yang belum punya draft sama sekali. Bilmare memulai dengan memverifikasi dan membangun Master Matrix sebagai single source of truth.',
-                duration: '8–12 minggu',
-                ideal: 'Calon IPO, bisnis keluarga transisi, laporan perdana',
-                label: 'Pelajari Tier 2',
+                tagline: 'For companies building their reporting foundation from the ground up.',
+                desc: 'For companies without an existing draft. Bilmare builds the Master Matrix as a single source of truth, then develops the report with each claim traceable to its source.',
+                duration: '8–12 weeks',
+                ideal: 'Pre-IPO companies, family businesses in transition, and first-time reporters',
+                label: 'See Tier 2',
                 featured: false,
               },
               {
                 title: 'Institutional Memory Retainer',
-                tagline: '"Investasi yang nilainya bertumbuh setiap tahun."',
-                desc: 'Seluruh data historis klien — Master Matrix, time-series database, definisi metrik, source archive — tetap terjaga dan menjadi baseline laporan tahun depan.',
-                duration: 'Ongoing / Tahunan',
-                ideal: 'Klien eksisting Tier 1 atau Tier 2',
-                label: 'Pelajari Retainer',
+                tagline: 'Institutional knowledge that compounds over time.',
+                desc: 'All client data, including the Master Matrix, time series records, metric definitions, and source archives, is maintained as a living baseline for each reporting cycle.',
+                duration: 'Ongoing / Annual',
+                ideal: 'Existing Tier 1 or Tier 2 clients',
+                label: 'See Retainer',
                 featured: false,
               },
             ].map((svc, i) => (
@@ -278,17 +271,17 @@ export default function Home() {
                   </div>
                   <div className="border-t border-line pt-5 font-sans text-sm mb-5">
                     <div className="font-semibold text-text-dark mb-1">
-                      Durasi: <span className="font-normal text-text-muted">{svc.duration}</span>
+                      Duration: <span className="font-normal text-text-muted">{svc.duration}</span>
                     </div>
                     <div className="font-semibold text-text-dark">
-                      Ideal Untuk: <span className="font-normal text-text-muted">{svc.ideal}</span>
+                      Ideal For: <span className="font-normal text-text-muted">{svc.ideal}</span>
                     </div>
                   </div>
                   <Link
                     to="/layanan"
                     className="text-mckinsey-blue font-sans font-semibold text-[15px] hover:text-blue-mid inline-flex items-center mt-auto w-fit"
                   >
-                    {svc.label} <span className="ml-2 font-mono">&rarr;</span>
+                    {svc.label}
                   </Link>
                 </div>
               </FadeIn>
@@ -302,11 +295,11 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
           <FadeIn>
             <div className="text-white/80 font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
-              SIAPA YANG KAMI BANTU
+              WHO WE WORK WITH
             </div>
             <h2 className="font-georgia text-white text-[clamp(24px,4vw,44px)] leading-[1.3] font-semibold mb-12 max-w-4xl">
-              Kami bekerja dengan emiten, calon IPO, dan perusahaan yang memahami bahwa pengungkapan
-              bukan sekadar kewajiban.
+              Bilmare works with listed companies and regulated institutions where disclosure quality
+              is not optional.
             </h2>
           </FadeIn>
 
@@ -314,22 +307,22 @@ export default function Home() {
             {[
               {
                 title: 'Emiten BEI Mid-Cap',
-                desc: 'Belum di-assure, mendekati deadline PSPK 1/2. Pintu masuk: PSPK Readiness Assessment.',
+                desc: 'Listed companies yet to undergo sustainability assurance. Bilmare identifies exactly where the gaps are before regulators do.',
                 contact: 'Corporate Secretary / Head of Finance',
               },
               {
                 title: 'Perusahaan Calon IPO (Series B+)',
-                desc: 'Pre-IPO Disclosure Readiness. Investor due diligence membutuhkan pengungkapan yang dapat dipertanggungjawabkan.',
+                desc: 'Pre-IPO companies where investor due diligence requires disclosures that are accurate, consistent, and fully traceable.',
                 contact: 'CFO / Head of Corporate Finance',
               },
               {
                 title: 'Perbankan & Asuransi',
-                desc: 'Beroperasi di bawah regulasi ketat OJK. Memerlukan verification dan assurance readiness layer mendalam.',
+                desc: 'Financial institutions under OJK oversight that require rigorous verification across sustainability and governance disclosures.',
                 contact: 'Corporate Secretary / Compliance Director',
               },
               {
                 title: 'Bisnis Keluarga Transisi',
-                desc: 'Sedang menuju tata kelola modern. Membangun laporan perdana yang membangun kredibilitas institusional.',
+                desc: 'Family-owned businesses moving toward formal governance, building their first sustainability report on a foundation that holds.',
                 contact: 'Board of Directors / Sustainability Lead',
               },
             ].map((segment, i) => (
@@ -342,7 +335,7 @@ export default function Home() {
                     {segment.desc}
                   </p>
                   <div className="font-sans text-white/50 text-[13px] border-t border-white/10 pt-4 mt-auto">
-                    Kontak Utama: <span className="text-white">{segment.contact}</span>
+                    Primary Contact: <span className="text-white">{segment.contact}</span>
                   </div>
                 </div>
               </FadeIn>
@@ -356,11 +349,11 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
           <FadeIn>
             <div className="text-text-muted font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
-              MENGAPA BILMARE
+              WHY BILMARE
             </div>
             <h2 className="font-georgia text-text-dark text-[clamp(24px,4vw,48px)] leading-[1.2] font-semibold mb-16 max-w-3xl">
-              Bukan konsultan generik. Bukan agency laporan. Satu-satunya spesialis PSPK 1/PSPK 2 di
-              Indonesia.
+              Bilmare does one thing. Pre-assurance verification for sustainability and annual
+              reports in Indonesia.
             </h2>
           </FadeIn>
 
@@ -368,18 +361,18 @@ export default function Home() {
             {[
               {
                 num: '01',
-                title: 'Spesialisasi Tunggal',
-                desc: 'Bilmare hanya mengerjakan satu hal: cross-document disclosure readiness dan reconciliation menghadapi PSPK 1/PSPK 2. Tidak ada proyek lain yang mengalihkan perhatian kami.',
+                title: 'Single Focus',
+                desc: 'Bilmare works exclusively on disclosure readiness and cross-document verification for sustainability and annual reports. Full focus, every engagement.',
               },
               {
                 num: '02',
-                title: 'Verifikasi, Bukan Penulisan',
-                desc: 'Setiap klaim dapat dipertanggungjawabkan di hadapan regulator, investor, dan assurance provider. Kami bekerja dengan metodologi empat layer yang terstruktur dan terdokumentasi.',
+                title: 'Independent Verification',
+                desc: 'Every claim in the report is traceable to its source and defensible under independent scrutiny. The work is structured, documented, and built to withstand review.',
               },
               {
                 num: '03',
                 title: 'Institutional Memory',
-                desc: 'Data historis klien tersimpan di sistem Bilmare. Laporan tahun berikutnya tidak mulai dari nol. Ini adalah moat jangka panjang yang genuinely tidak bisa dipindahkan ke vendor lain.',
+                desc: 'All client data, verification records, and source documentation are retained in the Bilmare Engine. Each reporting cycle builds on the last, accumulating institutional knowledge that stays with the client.',
               },
             ].map((item, i) => (
               <FadeIn key={i} delay={0.1 * i}>
@@ -405,14 +398,14 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 relative z-10 flex flex-col items-center">
           <FadeIn className="text-center mb-10 md:mb-12">
             <div className="text-mckinsey-blue font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
-              MULAI SEKARANG
+              GET STARTED
             </div>
             <h2 className="font-georgia text-white text-[clamp(28px,5vw,56px)] leading-[1.1] font-bold mb-5">
-              Mulai Sebelum Waktunya Habis
+              Start with a conversation.
             </h2>
             <p className="font-sans text-white/80 text-base md:text-[17px] leading-relaxed max-w-2xl mx-auto">
-              Jadwalkan discovery call gratis untuk memahami gap kesiapan PSPK 1/2 perusahaan Anda.
-              Tim Bilmare akan menghubungi Anda dalam 1×24 jam.
+              Schedule a discovery call to understand where the report stands against current
+              regulatory requirements.
             </p>
           </FadeIn>
 

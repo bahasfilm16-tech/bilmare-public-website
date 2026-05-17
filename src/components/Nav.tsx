@@ -4,10 +4,10 @@ import { Menu, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
 const navLinks = [
-  { name: 'Layanan', path: '/layanan' },
-  { name: 'Metodologi', path: '/metodologi' },
-  { name: 'Tentang Kami', path: '/tentang-kami' },
-  { name: 'Kontak', path: '/kontak' },
+  { name: 'Services', path: '/layanan' },
+  { name: 'Methodology', path: '/metodologi' },
+  { name: 'About', path: '/tentang-kami' },
+  { name: 'Contact', path: '/kontak' },
 ];
 
 export default function Nav() {

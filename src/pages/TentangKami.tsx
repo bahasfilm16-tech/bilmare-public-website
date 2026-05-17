@@ -16,15 +16,15 @@ export default function TentangKami() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 py-20 md:py-28 relative z-10">
           <FadeIn>
             <div className="text-mckinsey-blue font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-6">
-              TENTANG BILMARE
+              ABOUT BILMARE
             </div>
             <h1 className="font-georgia text-white text-[clamp(36px,6vw,72px)] leading-[1.1] font-bold mb-7 max-w-4xl">
-              Kepercayaan masa depan dimulai dari pertanggungjawaban hari ini.
+              Every claim. Verified.
             </h1>
             <p className="font-sans text-white/80 text-base md:text-xl leading-relaxed max-w-3xl">
-              Kami adalah satu-satunya firma di Indonesia dengan spesialisasi tunggal:
-              mempersiapkan laporan emiten menghadapi kewajiban PSPK 1/PSPK 2 per Januari 2027.
-              Berbasis di Jakarta, Indonesia.
+              Bilmare is a specialist firm focused exclusively on one thing: preparing listed
+              companies for PSPK 1/PSPK 2 compliance ahead of the January 2027 deadline. Based
+              in Jakarta, Indonesia.
             </p>
           </FadeIn>
         </div>
@@ -35,39 +35,39 @@ export default function TentangKami() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
           <FadeIn>
             <div className="text-text-muted font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
-              MENGAPA KAMI ADA
+              WHY WE EXIST
             </div>
             <h2 className="font-georgia text-text-dark text-[clamp(26px,4vw,48px)] leading-[1.2] font-semibold mb-14 max-w-3xl">
-              Integritas data keberlanjutan bukan lagi opsi, melainkan syarat fundamental
-              berbisnis.
+              Sustainability data integrity is no longer optional. It is a fundamental condition
+              of doing business.
             </h2>
           </FadeIn>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 font-sans text-text-dark/80 text-base md:text-lg leading-[1.75]">
             <FadeIn delay={0.1}>
               <p className="mb-6">
-                Bilmare dibangun untuk menyelesaikan satu masalah sistemik: dari 950+ emiten yang
-                terdaftar di Bursa Efek Indonesia, lebih dari 850 belum siap menghadapi standar
-                PSPK 1 dan PSPK 2 yang diwajibkan oleh OJK mulai 1 Januari 2027.
+                Bilmare was built to address a systemic problem. Of the 950+ companies listed on
+                the Indonesia Stock Exchange, more than 850 are not ready for the PSPK 1 and PSPK 2
+                standards mandated by OJK from 1 January 2027.
               </p>
               <p>
-                Banyak perusahaan masih melihat laporan keberlanjutan sebagai latihan public
-                relations. Laporan ditulis dengan narasi yang meyakinkan, namun ketika diukur,
-                angka-angkanya tidak konsisten antara Laporan Keuangan, Annual Report, dan
-                Sustainability Report.
+                Many companies still treat sustainability reporting as a public relations exercise.
+                Reports are written with convincing narratives, but when measured, the figures are
+                inconsistent across the Financial Statements, Annual Report, and Sustainability
+                Report.
               </p>
             </FadeIn>
             <FadeIn delay={0.2}>
               <p className="mb-6">
-                Regulator dan investor institusional sudah mulai menutup pintu untuk pengungkapan
-                tanpa dasar. Namun ironisnya, pasar dipenuhi oleh konsultan manajemen generik atau
-                agensi kreatif yang fokus pada penulisan dan desain, bukan pada verifikasi klaim
-                dan rekonsiliasi data.
+                Regulators and institutional investors have begun closing the door on unsubstantiated
+                disclosures. Yet the market is filled with generalist management consultants and
+                creative agencies focused on writing and design, not on claim verification and data
+                reconciliation.
               </p>
               <p>
-                Di sinilah Bilmare masuk. Kami tidak memulai pekerjaan dengan menulis. Kami
-                memulainya dengan memverifikasi setiap angka dan memastikan setiap klaim yang akan
-                diungkap dapat dipertanggungjawabkan di meja assurance provider.
+                This is where Bilmare operates. We do not begin work by writing. We begin by
+                verifying every figure and ensuring every claim that will be disclosed can be
+                defended at the assurance provider's desk.
               </p>
             </FadeIn>
           </div>
@@ -80,17 +80,17 @@ export default function TentangKami() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14">
             <FadeIn>
               <h2 className="font-georgia text-white text-[clamp(26px,3vw,36px)] leading-[1.2] font-semibold mb-8">
-                Apa itu Bilmare?
+                What Bilmare Is
               </h2>
               <ul className="space-y-5">
                 {[
-                  'Spesialis kepatuhan pengungkapan PSPK 1/2 dan GRI Standards.',
-                  'Arsitek "Source of Truth" bagi data non-finansial perusahaan.',
-                  'Firma verifikasi cross-document yang memastikan sinkronisasi angka.',
-                  'Mitra strategis sebelum Anda mendatangkan assurance provider eksternal.',
+                  'A specialist in PSPK 1/2 and GRI Standards disclosure compliance.',
+                  'The architect of a single source of truth for the company\'s non-financial data.',
+                  'A cross-document verification firm that ensures numerical consistency.',
+                  'A strategic partner before external assurance providers are engaged.',
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-4">
-                    <span className="text-mckinsey-blue font-mono mt-1 shrink-0">&rarr;</span>
+                    <span className="text-mckinsey-blue font-mono mt-1 shrink-0">+</span>
                     <span className="font-sans text-white/90 text-[16px] md:text-[17px] leading-relaxed">
                       {item}
                     </span>
@@ -101,18 +101,17 @@ export default function TentangKami() {
 
             <FadeIn delay={0.2}>
               <h2 className="font-georgia text-white text-[clamp(26px,3vw,36px)] leading-[1.2] font-semibold mb-8">
-                Apa yang{' '}
+                What Bilmare Is{' '}
                 <span className="text-mckinsey-blue underline decoration-2 underline-offset-4">
-                  Bukan
-                </span>{' '}
-                Bilmare?
+                  Not
+                </span>
               </h2>
               <ul className="space-y-5">
                 {[
-                  'Bukan Assurance Provider: Kami tidak memberikan opini assurance (kami adalah pihak yang memastikan laporan Anda lolos uji assurance mereka).',
-                  'Bukan Agensi Kreatif: Kami tidak berfokus pada layout cantik, kami berfokus pada validitas materi.',
-                  'Bukan Konsultan Generik: Kami menolak proyek di luar spesialisasi verifikasi pelaporan.',
-                  'Bukan Penjual Template: Metodologi kami diterapkan secara spesifik pada kompleksitas masing-masing emiten.',
+                  'Not an Assurance Provider: Bilmare does not issue assurance opinions. We ensure the report is ready to pass independent assurance.',
+                  'Not a Creative Agency: The focus is not on design. The focus is on the validity of every claim.',
+                  'Not a Generalist Consultant: Bilmare declines work outside the scope of disclosure verification.',
+                  'Not a Template Provider: The methodology is applied specifically to each company\'s complexity.',
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-4">
                     <span className="text-white/40 font-mono mt-1 shrink-0">&times;</span>
@@ -132,10 +131,10 @@ export default function TentangKami() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20">
           <FadeIn>
             <div className="text-text-muted font-sans text-[11px] tracking-[0.15em] uppercase font-semibold mb-4">
-              PRINSIP KAMI
+              OUR PRINCIPLES
             </div>
             <h2 className="font-georgia text-text-dark text-[clamp(26px,4vw,48px)] leading-[1.2] font-semibold mb-14 max-w-2xl">
-              Tiga prinsip yang tidak pernah kami kompromikan.
+              Three principles we do not compromise.
             </h2>
           </FadeIn>
 
@@ -143,18 +142,18 @@ export default function TentangKami() {
             {[
               {
                 num: '01',
-                title: 'Akuntabilitas di Atas Segalanya',
-                desc: 'Setiap klaim yang kami bantu kembangkan harus dapat dipertanggungjawabkan. Tidak ada grey area dalam standar yang kami terapkan.',
+                title: 'Accountability Above All',
+                desc: 'Every claim we help develop must be defensible. There is no grey area in the standards we apply.',
               },
               {
                 num: '02',
-                title: 'Spesialisasi, Bukan Generalisasi',
-                desc: 'Kami fokus sepenuhnya pada satu domain. Kedalaman lebih berharga dari keluasan ketika risiko regulasi dan reputasi menjadi taruhannya.',
+                title: 'Specialisation, Not Generalisation',
+                desc: 'We focus entirely on one domain. Depth is more valuable than breadth when regulatory and reputational risk is at stake.',
               },
               {
                 num: '03',
-                title: 'Kemitraan Jangka Panjang',
-                desc: 'Kami membangun aset pengetahuan institusional yang tumbuh nilainya bersama klien setiap tahun. Bukan transaksi satu kali.',
+                title: 'Long-Term Partnership',
+                desc: 'We build institutional knowledge assets that grow in value with each client engagement. This is not a one-off transaction.',
               },
             ].map((v, i) => (
               <FadeIn key={i} delay={0.1 * i}>
@@ -178,20 +177,20 @@ export default function TentangKami() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 md:px-20 text-center">
           <FadeIn>
             <h3 className="font-georgia text-white text-xl md:text-2xl font-medium mb-6 max-w-2xl mx-auto">
-              Siap memastikan laporan Anda dapat dipertanggungjawabkan?
+              Ready to ensure the report can be defended?
             </h3>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/kontak"
                 className="bg-mckinsey-blue hover:bg-blue-mid text-white font-sans text-sm font-semibold py-4 px-8 rounded-sm transition-colors inline-block"
               >
-                Jadwalkan Discovery Call
+                Schedule a Discovery Call
               </Link>
               <Link
                 to="/layanan"
                 className="border border-white text-white hover:bg-white hover:text-deep-navy font-sans text-sm font-semibold py-4 px-8 rounded-sm transition-colors inline-block"
               >
-                Lihat Layanan Kami <span className="ml-1 font-mono">&rarr;</span>
+                See Our Services
               </Link>
             </div>
           </FadeIn>
