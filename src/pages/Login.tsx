@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
-const PORTAL_TIM_URL = import.meta.env.VITE_PORTAL_TIM_URL || 'https://portal-tim-bilmare.vercel.app';
+const PORTAL_TIM_URL = import.meta.env.VITE_PORTAL_TIM_URL || 'https://portal-tim.vercel.app';
 const PORTAL_CLIENT_URL = import.meta.env.VITE_PORTAL_CLIENT_URL || 'https://portal-client-delta.vercel.app';
 
 export default function Login() {
